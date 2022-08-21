@@ -52,7 +52,7 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None, offset=(
         id = int(identities[i]) if identities is not None else 0
         color = compute_color_for_labels(id)
         data = (int((box[0]+box[2])/2),(int((box[1]+box[3])/2)))
-        label = str(id)
+        label = str(id) + ":"+ names[cat]
         (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 1)
         cv2.rectangle(img, (x1, y1), (x2, y2), (255,144,30), 2)
         cv2.rectangle(img, (x1, y1 - 20), (x1 + w, y1), (255,144,30), -1)
