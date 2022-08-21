@@ -1,7 +1,7 @@
 # yolov7-object-tracking
 
 ### New Features
-- Steps to Run Code
+- Added Label for Every Track
 - Code can run on Both (CPU & GPU)
 - Video/WebCam/External Camera/IP Stream Supported
 
