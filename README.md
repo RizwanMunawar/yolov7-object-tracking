@@ -53,13 +53,15 @@ python detect_and_track.py --weights yolov7.pt --source "your video.mp4" -classe
 ### Results
 <table>
   <tr>
-    <td>YOLOv7 Object Tracking</td>
+    <td>YOLOv7 Object Tracking with ID</td>
+    <td>YOLOv7 Object Tracking with ID and Label </td>
   </tr>
   <tr>
     <td><img src="https://user-images.githubusercontent.com/62513924/185798283-0455ce49-4359-4e52-8d69-fd30dd61c5b4.png"></td>
+     <td><img src="https://user-images.githubusercontent.com/62513924/185798283-0455ce49-4359-4e52-8d69-fd30dd61c5b4.png"></td>
   </tr>
  </table>
- 
+
  ### References
  - https://github.com/WongKinYiu/yolov7
  - https://github.com/abewley/sort
