@@ -51,3 +51,13 @@ python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
 python detect_and_track.py --weights yolov7.pt --source "your video.mp4" -classes 0
 ```
 - Output file will be created in the ```working-dir/runs/detect/obj-tracking``` with original filename
+
+### Results
+<table>
+  <tr>
+    <td>YOLOv7 Object Tracking</td>
+  </tr>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/62513924/185798283-0455ce49-4359-4e52-8d69-fd30dd61c5b4.png"></td>
+  </tr>
+ </table>
