@@ -6,7 +6,7 @@
 - Video/WebCam/External Camera/IP Stream Supported
 
 ### Coming Soon
-- Development of streamlit dashboard for Object Tracking and Counting
+- Development of streamlit dashboard for Object Tracking
 
 ### Steps to run Code
 - Clone the repository.
