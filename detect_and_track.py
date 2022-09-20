@@ -5,7 +5,7 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
-
+from random import randint
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
 from utils.general import check_img_size, check_requirements, \
@@ -35,13 +35,9 @@ def bbox_rel(*xyxy):
     h = bbox_h
     return x_c, y_c, w, h
 
-"""Simple function that adds fixed color depending on the class"""
-def compute_color_for_labels(label):
-    color = [int((p * (label ** 2 - label + 1)) % 255) for p in palette]
-    return tuple(color)
 
 """Function to Draw Bounding boxes"""
-def draw_boxes(img, bbox, identities=None, categories=None, names=None, offset=(0, 0)):
+def draw_boxes(img, bbox, identities=None, categories=None, names=None,offset=(0, 0)):
     for i, box in enumerate(bbox):
         x1, y1, x2, y2 = [int(i) for i in box]
         x1 += offset[0]
@@ -50,13 +46,13 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None, offset=(
         y2 += offset[1]
         cat = int(categories[i]) if categories is not None else 0
         id = int(identities[i]) if identities is not None else 0
-        color = compute_color_for_labels(id)
         data = (int((box[0]+box[2])/2),(int((box[1]+box[3])/2)))
         label = str(id) + ":"+ names[cat]
         (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 1)
-        cv2.rectangle(img, (x1, y1), (x2, y2), (255,144,30), 2)
+        cv2.rectangle(img, (x1, y1), (x2, y2), (255,0,20), 2)
         cv2.rectangle(img, (x1, y1 - 20), (x1 + w, y1), (255,144,30), -1)
-        cv2.putText(img, label, (x1, y1 - 5),cv2.FONT_HERSHEY_SIMPLEX, 0.6, [255, 255, 255], 1)
+        cv2.putText(img, label, (x1, y1 - 5),cv2.FONT_HERSHEY_SIMPLEX, 
+                    0.6, [255, 255, 255], 1)
         # cv2.circle(img, data, 6, color,-1)
     return img
 #..............................................................................
@@ -124,6 +120,17 @@ def detect(save_img=False):
     old_img_b = 1
 
     t0 = time.time()
+
+    #........Rand Color for every trk.......
+    rand_color_list = []
+    for i in range(0,5005):
+        r = randint(0, 255)
+        g = randint(0, 255)
+        b = randint(0, 255)
+        rand_color = (r, g, b)
+        rand_color_list.append(rand_color)
+    #.........................
+   
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -189,15 +196,13 @@ def detect(save_img=False):
                 for track in tracks:
                     # color = compute_color_for_labels(id)
                     #draw tracks
-
                     [cv2.line(im0, (int(track.centroidarr[i][0]),
                                     int(track.centroidarr[i][1])), 
                                     (int(track.centroidarr[i+1][0]),
                                     int(track.centroidarr[i+1][1])),
-                                    (225,105,65), thickness=2) 
+                                    rand_color_list[track.id], thickness=2) 
                                     for i,_ in  enumerate(track.centroidarr) 
                                         if i < len(track.centroidarr)-1 ] 
-                
                 # draw boxes for visualization
                 if len(tracked_dets)>0:
                     bbox_xyxy = tracked_dets[:,:4]
