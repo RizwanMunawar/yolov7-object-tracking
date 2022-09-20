@@ -48,7 +48,9 @@ python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
 #for specific class (person)
 python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --classes 0
 ```
+
 - Output file will be created in the ```working-dir/runs/detect/obj-tracking``` with original filename
+
 
 ### Results
 <table>
@@ -58,7 +60,7 @@ python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --class
   </tr>
   <tr>
     <td><img src="https://user-images.githubusercontent.com/62513924/185798283-0455ce49-4359-4e52-8d69-fd30dd61c5b4.png"></td>
-     <td><img src="https://user-images.githubusercontent.com/62513924/185805563-d66af1ec-a831-4912-9bbb-de278a8323f4.png"></td>
+     <td><img src="https://user-images.githubusercontent.com/62513924/191241661-ed5b87eb-5c8c-49bc-8301-531ee86f3b38.png"></td>
   </tr>
  </table>
 
