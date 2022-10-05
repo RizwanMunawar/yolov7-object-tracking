@@ -39,8 +39,7 @@ pip install --upgrade pip
 ```
 pip install -r requirements.txt
 ```
-- Download [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) object detection weights from link and move them to the working directory {yolov7-object-tracking}
-- Run the code with mentioned command below.
+- Run the code with mentioned command below (by default, pretrained [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) weights will be automatically downloaded into the working directory if they don't already exist).
 ```
 #if you want to change source file
 python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
