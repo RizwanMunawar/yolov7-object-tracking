@@ -41,6 +41,9 @@ pip install -r requirements.txt
 ```
 - Run the code with mentioned command below (by default, pretrained [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) weights will be automatically downloaded into the working directory if they don't already exist).
 ```
+# for detection only
+python detect.py --weights yolov7.pt --source "your video.mp4"
+
 #if you want to change source file
 python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
 
