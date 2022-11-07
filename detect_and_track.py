@@ -63,7 +63,7 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None,offset=(0
 
 
 def detect(save_img=False):
-    source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
+    source, weights, view_img, save_txt, imgsz, trace, colored_trk= opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace, opt.colored_trk
     save_img = not opt.nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
@@ -199,14 +199,25 @@ def detect(save_img=False):
                 #loop over tracks
                 for track in tracks:
                     # color = compute_color_for_labels(id)
-                    #draw tracks
-                    [cv2.line(im0, (int(track.centroidarr[i][0]),
+                    #draw colored tracks
+                    if colored_trk:
+                        [cv2.line(im0, (int(track.centroidarr[i][0]),
                                     int(track.centroidarr[i][1])), 
                                     (int(track.centroidarr[i+1][0]),
                                     int(track.centroidarr[i+1][1])),
                                     rand_color_list[track.id], thickness=2) 
                                     for i,_ in  enumerate(track.centroidarr) 
-                                        if i < len(track.centroidarr)-1 ] 
+                                      if i < len(track.centroidarr)-1 ] 
+                    #draw same color tracks
+                    else:
+                        [cv2.line(im0, (int(track.centroidarr[i][0]),
+                                    int(track.centroidarr[i][1])), 
+                                    (int(track.centroidarr[i+1][0]),
+                                    int(track.centroidarr[i+1][1])),
+                                    (255,0,0), thickness=2) 
+                                    for i,_ in  enumerate(track.centroidarr) 
+                                      if i < len(track.centroidarr)-1 ] 
+                
                 # draw boxes for visualization
                 if len(tracked_dets)>0:
                     bbox_xyxy = tracked_dets[:,:4]
@@ -274,6 +285,8 @@ if __name__ == '__main__':
     parser.add_argument('--name', default='object_tracking', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
+    parser.add_argument('--colored-trk', action='store_true', help='assign different color to every track')
+    
     parser.set_defaults(download=True)
     opt = parser.parse_args()
     print(opt)
