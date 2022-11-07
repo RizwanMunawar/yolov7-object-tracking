@@ -49,6 +49,9 @@ python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
 
 #for specific class (person)
 python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --classes 0
+
+#for colored tracks 
+python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --colored-trk
 ```
 
 - Output file will be created in the ```working-dir/runs/detect/obj-tracking``` with original filename
