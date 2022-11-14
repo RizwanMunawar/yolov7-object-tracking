@@ -194,7 +194,7 @@ if __name__ == '__main__':
     print(opt)
 
     #check_requirements(exclude=('pycocotools', 'thop'))
-    if opt.download and not os.path.exists(opt.weights[0]):
+    if opt.download and not os.path.exists(str(opt.weights)):
         print('Model weights not found. Attempting to download now...')
         download('./')
 
