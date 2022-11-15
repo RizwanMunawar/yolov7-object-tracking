@@ -99,9 +99,11 @@ class KalmanBoxTracker(object):
         CY = (bbox[1]+bbox[3])//2
         self.centroidarr.append((CX,CY))
         
-        
         #keep yolov5 detected class information
         self.detclass = bbox[5]
+
+        # If we want to store bbox
+        self.bbox_history = [bbox]
         
     def update(self, bbox):
         """
@@ -116,7 +118,8 @@ class KalmanBoxTracker(object):
         CX = (bbox[0]+bbox[2])//2
         CY = (bbox[1]+bbox[3])//2
         self.centroidarr.append((CX,CY))
-        
+        self.bbox_history.append(bbox)
+    
     def predict(self):
         """
         Advances the state vector and returns the predicted bounding box estimate
