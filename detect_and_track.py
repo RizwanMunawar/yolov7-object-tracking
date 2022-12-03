@@ -23,23 +23,7 @@ from utils.download_weights import download
 import skimage
 from sort import *
 
-#............................... Tracker Functions ............................
-""" Random created palette"""
-palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
-
-"""" Calculates the relative bounding box from absolute pixel values. """
-def bbox_rel(*xyxy):
-    bbox_left = min([xyxy[0].item(), xyxy[2].item()])
-    bbox_top = min([xyxy[1].item(), xyxy[3].item()])
-    bbox_w = abs(xyxy[0].item() - xyxy[2].item())
-    bbox_h = abs(xyxy[1].item() - xyxy[3].item())
-    x_c = (bbox_left + bbox_w / 2)
-    y_c = (bbox_top + bbox_h / 2)
-    w = bbox_w
-    h = bbox_h
-    return x_c, y_c, w, h
-
-
+#............................... Bounding Boxes Drawing ............................
 """Function to Draw Bounding boxes"""
 def draw_boxes(img, bbox, identities=None, categories=None, names=None,offset=(0, 0)):
     for i, box in enumerate(bbox):
@@ -63,7 +47,7 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None,offset=(0
 
 
 def detect(save_img=False):
-    source, weights, view_img, save_txt, imgsz, trace, colored_trk, save_bbox_dim= opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace, opt.colored_trk, opt.save_bbox_dim
+    source, weights, view_img, save_txt, imgsz, trace, colored_trk, save_bbox_dim, rm_background= opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace, opt.colored_trk, opt.save_bbox_dim, opt.rm_background
     save_img = not opt.nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
@@ -78,6 +62,12 @@ def detect(save_img=False):
                        min_hits=sort_min_hits,
                        iou_threshold=sort_iou_thresh)
     #......................... 
+    
+    
+    #......Init Remove background .....
+    if rm_background:
+         backsub = cv2.createBackgroundSubtractorMOG2()
+    #..................................
     # Directories
     save_dir = Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
@@ -300,6 +290,7 @@ if __name__ == '__main__':
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
     parser.add_argument('--colored-trk', action='store_true', help='assign different color to every track')
     parser.add_argument('--save-bbox-dim', action='store_true', help='save bounding box dimensions with --save-txt tracks')
+    parser.add_argument('--rm-background', action='store_true', help='Remove frame background')
     
     parser.set_defaults(download=True)
     opt = parser.parse_args()
