@@ -41,13 +41,13 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None,offset=(0
         cv2.rectangle(img, (x1, y1 - 20), (x1 + w, y1), (255,144,30), -1)
         cv2.putText(img, label, (x1, y1 - 5),cv2.FONT_HERSHEY_SIMPLEX, 
                     0.6, [255, 255, 255], 1)
-        # cv2.circle(img, data, 6, color,-1)
+        # cv2.circle(img, data, 6, color,-1)   #centroid of box
     return img
 #..............................................................................
 
 
 def detect(save_img=False):
-    source, weights, view_img, save_txt, imgsz, trace, colored_trk, save_bbox_dim, rm_background= opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace, opt.colored_trk, opt.save_bbox_dim, opt.rm_background
+    source, weights, view_img, save_txt, imgsz, trace, colored_trk, save_bbox_dim= opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace, opt.colored_trk, opt.save_bbox_dim
     save_img = not opt.nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
@@ -64,10 +64,17 @@ def detect(save_img=False):
     #......................... 
     
     
-    #......Init Remove background .....
-    if rm_background:
-         backsub = cv2.createBackgroundSubtractorMOG2()
-    #..................................
+    #........Rand Color for every trk.......
+    rand_color_list = []
+    for i in range(0,5005):
+        r = randint(0, 255)
+        g = randint(0, 255)
+        b = randint(0, 255)
+        rand_color = (r, g, b)
+        rand_color_list.append(rand_color)
+    #......................................
+   
+
     # Directories
     save_dir = Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
@@ -115,16 +122,7 @@ def detect(save_img=False):
 
     t0 = time.time()
 
-    #........Rand Color for every trk.......
-    rand_color_list = []
-    for i in range(0,5005):
-        r = randint(0, 255)
-        g = randint(0, 255)
-        b = randint(0, 255)
-        rand_color = (r, g, b)
-        rand_color_list.append(rand_color)
-    #.........................
-   
+    
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -231,7 +229,8 @@ def detect(save_img=False):
                 
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
-
+            
+        
             # Stream results
             if view_img:
                 cv2.imshow(str(p), im0)
@@ -290,7 +289,6 @@ if __name__ == '__main__':
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
     parser.add_argument('--colored-trk', action='store_true', help='assign different color to every track')
     parser.add_argument('--save-bbox-dim', action='store_true', help='save bounding box dimensions with --save-txt tracks')
-    parser.add_argument('--rm-background', action='store_true', help='Remove frame background')
     
     parser.set_defaults(download=True)
     opt = parser.parse_args()
