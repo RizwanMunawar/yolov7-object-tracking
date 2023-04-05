@@ -91,6 +91,13 @@ python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --save-
  - https://github.com/abewley/sort
 
 ### My Medium Articles
+- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/04/maximizing-efficiency-on-construction.html 🔥
+- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/instance-segmentation-vs-semantic.html ✅
+- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/mastering-image-classification.html 🔥
+- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-detection-in-agriculture.html ✅
+- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/techniques-for-accurate-data-annotation.html ✅
+- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-tracking-using-bytetrack.html 🔥
+- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/pose-estimation-computer-vision.html ✅
 - https://medium.com/augmented-startups/yolov7-training-on-custom-data-b86d23e6623
 - https://medium.com/augmented-startups/roadmap-for-computer-vision-engineer-45167b94518c
 - https://medium.com/augmented-startups/yolor-or-yolov5-which-one-is-better-2f844d35e1a1
