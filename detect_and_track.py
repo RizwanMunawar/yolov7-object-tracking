@@ -75,7 +75,8 @@ def detect(save_img=False):
     
     #........Rand Color for every trk.......
     rand_color_list = []
-    for i in range(0,5005):
+    amount_rand_color_prime = 5003 # prime number
+    for i in range(0,amount_rand_color_prime):
         r = randint(0, 255)
         g = randint(0, 255)
         b = randint(0, 255)
@@ -204,7 +205,7 @@ def detect(save_img=False):
                                     int(track.centroidarr[i][1])), 
                                     (int(track.centroidarr[i+1][0]),
                                     int(track.centroidarr[i+1][1])),
-                                    rand_color_list[track.id], thickness=2) 
+                                    rand_color_list[track.id % amount_rand_color_prime], thickness=2) 
                                     for i,_ in  enumerate(track.centroidarr) 
                                       if i < len(track.centroidarr)-1 ] 
                     #draw same color tracks
@@ -234,8 +235,10 @@ def detect(save_img=False):
                     identities = tracked_dets[:, 8]
                     categories = tracked_dets[:, 4]
                     draw_boxes(im0, bbox_xyxy, identities, categories, names, save_with_object_id, txt_path)
-                #........................................................
-                
+            else: #SORT should be updated even with no detections
+                tracked_dets = sort_tracker.update()
+            #........................................................
+            
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
             
