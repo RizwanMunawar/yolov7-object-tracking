@@ -45,9 +45,15 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None, save_wit
         txt_str = ""
         if save_with_object_id:
             txt_str += "%i %i %f %f %f %f %f %f" % (
-                id, cat, int(box[0])/img.shape[1], int(box[1])/img.shape[0] , int(box[2])/img.shape[1], int(box[3])/img.shape[0] ,int(box[0] + (box[2] * 0.5))/img.shape[1] ,
-                int(box[1] + (
-                    box[3]* 0.5))/img.shape[0])
+                id,
+                cat,
+                int(box[0]) / img.shape[1],
+                int(box[1]) / img.shape[0],
+                int(box[2]) / img.shape[1],
+                int(box[3]) / img.shape[0],
+                int(box[0] + box[2]) * 0.5 / img.shape[1],
+                int(box[1] + box[3]) * 0.5 / img.shape[0],
+            )
             txt_str += "\n"
             with open(path + '.txt', 'a') as f:
                 f.write(txt_str)
