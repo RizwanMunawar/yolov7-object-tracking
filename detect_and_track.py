@@ -11,13 +11,17 @@ import torch.backends.cudnn as cudnn
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
 from utils.general import check_img_size, check_requirements, \
-                check_imshow, non_max_suppression, apply_classifier, \
-                scale_coords, xyxy2xywh, strip_optimizer, set_logging, \
-                increment_path
+    check_imshow, non_max_suppression, apply_classifier, \
+    scale_coords, xyxy2xywh, strip_optimizer, set_logging, \
+    increment_path
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, \
-                time_synchronized, TracedModel
+    time_synchronized, TracedModel
 from utils.download_weights import download
+from custom_logic.helper import get_video_info
+from custom_logic.models.video import Video
+from custom_logic.models.tracking_object import TrackingObject
+from custom_logic.tracking_repository import insert_tracking_run, add_video, track_object_frame_data
 
 #For SORT tracking
 import skimage
@@ -25,7 +29,8 @@ from sort import *
 
 #............................... Bounding Boxes Drawing ............................
 """Function to Draw Bounding boxes"""
-def draw_boxes(img, bbox, identities=None, categories=None, names=None, save_with_object_id=False, path=None,offset=(0, 0)):
+def draw_boxes(img, bbox, identities=None, categories=None, names=None, save_with_object_id=False, path=None):
+    offset=(0, 0)
     for i, box in enumerate(bbox):
         x1, y1, x2, y2 = [int(i) for i in box]
         x1 += offset[0]
@@ -39,15 +44,15 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None, save_wit
         (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 1)
         cv2.rectangle(img, (x1, y1), (x2, y2), (255,0,20), 2)
         cv2.rectangle(img, (x1, y1 - 20), (x1 + w, y1), (255,144,30), -1)
-        cv2.putText(img, label, (x1, y1 - 5),cv2.FONT_HERSHEY_SIMPLEX, 
+        cv2.putText(img, label, (x1, y1 - 5),cv2.FONT_HERSHEY_SIMPLEX,
                     0.6, [255, 255, 255], 1)
         # cv2.circle(img, data, 6, color,-1)   #centroid of box
         txt_str = ""
         if save_with_object_id:
             txt_str += "%i %i %f %f %f %f %f %f" % (
-                id, cat, int(box[0])/img.shape[1], int(box[1])/img.shape[0] , int(box[2])/img.shape[1], int(box[3])/img.shape[0] ,int(box[0] + (box[2] * 0.5))/img.shape[1] ,
-                int(box[1] + (
-                    box[3]* 0.5))/img.shape[0])
+                id, cat, int(box[0])/img.shape[1], int(box[1])/img.shape[0] , int(box[2])/img.shape[1], int(box[3])/img.shape[0] ,int((box[0] + box[2] * 0.5))/img.shape[1] ,
+                int((box[1] +
+                     box[3]* 0.5))/img.shape[0])
             txt_str += "\n"
             with open(path + '.txt', 'a') as f:
                 f.write(txt_str)
@@ -61,18 +66,22 @@ def detect(save_img=False):
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
 
+    total_frames, fps, duration_seconds = get_video_info(source)
+    video = Video(None, source, duration_seconds, total_frames)
+    video_id = add_video(video)
+    tracking_run_id = insert_tracking_run(video_id)
 
     #.... Initialize SORT .... 
     #......................... 
-    sort_max_age = 5 
+    sort_max_age = 5
     sort_min_hits = 2
     sort_iou_thresh = 0.2
     sort_tracker = Sort(max_age=sort_max_age,
-                       min_hits=sort_min_hits,
-                       iou_threshold=sort_iou_thresh)
+                        min_hits=sort_min_hits,
+                        iou_threshold=sort_iou_thresh)
     #......................... 
-    
-    
+
+
     #........Rand Color for every trk.......
     rand_color_list = []
     amount_rand_color_prime = 5003 # prime number
@@ -83,7 +92,7 @@ def detect(save_img=False):
         rand_color = (r, g, b)
         rand_color_list.append(rand_color)
     #......................................
-   
+
 
     # Directories
     save_dir = Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))  # increment run
@@ -132,7 +141,7 @@ def detect(save_img=False):
 
     t0 = time.time()
 
-    
+
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -184,12 +193,12 @@ def detect(save_img=False):
                 #..................USE TRACK FUNCTION....................
                 #pass an empty array to sort
                 dets_to_sort = np.empty((0,6))
-                
+
                 # NOTE: We send in detected object class too
                 for x1,y1,x2,y2,conf,detclass in det.cpu().detach().numpy():
-                    dets_to_sort = np.vstack((dets_to_sort, 
-                                np.array([x1, y1, x2, y2, conf, detclass])))
-                
+                    dets_to_sort = np.vstack((dets_to_sort,
+                                              np.array([x1, y1, x2, y2, conf, detclass])))
+
                 # Run SORT
                 tracked_dets = sort_tracker.update(dets_to_sort)
                 tracks =sort_tracker.getTrackers()
@@ -202,21 +211,21 @@ def detect(save_img=False):
                     #draw colored tracks
                     if colored_trk:
                         [cv2.line(im0, (int(track.centroidarr[i][0]),
-                                    int(track.centroidarr[i][1])), 
-                                    (int(track.centroidarr[i+1][0]),
-                                    int(track.centroidarr[i+1][1])),
-                                    rand_color_list[track.id % amount_rand_color_prime], thickness=2) 
-                                    for i,_ in  enumerate(track.centroidarr) 
-                                      if i < len(track.centroidarr)-1 ] 
-                    #draw same color tracks
+                                        int(track.centroidarr[i][1])),
+                                  (int(track.centroidarr[i+1][0]),
+                                   int(track.centroidarr[i+1][1])),
+                                  rand_color_list[track.id % amount_rand_color_prime], thickness=2)
+                         for i,_ in  enumerate(track.centroidarr)
+                         if i < len(track.centroidarr)-1 ]
+                        #draw same color tracks
                     else:
                         [cv2.line(im0, (int(track.centroidarr[i][0]),
-                                    int(track.centroidarr[i][1])), 
-                                    (int(track.centroidarr[i+1][0]),
-                                    int(track.centroidarr[i+1][1])),
-                                    (255,0,0), thickness=2) 
-                                    for i,_ in  enumerate(track.centroidarr) 
-                                      if i < len(track.centroidarr)-1 ] 
+                                        int(track.centroidarr[i][1])),
+                                  (int(track.centroidarr[i+1][0]),
+                                   int(track.centroidarr[i+1][1])),
+                                  (255,0,0), thickness=2)
+                         for i,_ in  enumerate(track.centroidarr)
+                         if i < len(track.centroidarr)-1 ]
 
                     if save_txt and not save_with_object_id:
                         # Normalize coordinates
@@ -224,7 +233,10 @@ def detect(save_img=False):
                         if save_bbox_dim:
                             txt_str += " %f %f" % (np.abs(track.bbox_history[-1][0] - track.bbox_history[-1][2]) / im0.shape[0], np.abs(track.bbox_history[-1][1] - track.bbox_history[-1][3]) / im0.shape[1])
                         txt_str += "\n"
-                
+                        
+                        tracking_object = TrackingObject(tracking_run_id, frame, track.id, track.detclass, track.centroidarr[-1][0], track.centroidarr[-1][1], np.abs(track.bbox_history[-1][0] - track.bbox_history[-1][2]), np.abs(track.bbox_history[-1][1] - track.bbox_history[-1][3]))
+                        track_object_frame_data(tracking_object)
+
                 if save_txt and not save_with_object_id:
                     with open(txt_path + '.txt', 'a') as f:
                         f.write(txt_str)
@@ -238,17 +250,17 @@ def detect(save_img=False):
             else: #SORT should be updated even with no detections
                 tracked_dets = sort_tracker.update()
             #........................................................
-            
+
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
-            
-        
+
+
             # Stream results
             if view_img:
                 cv2.imshow(str(p), im0)
                 if cv2.waitKey(1) == ord('q'):  # q to quit
-                  cv2.destroyAllWindows()
-                  raise StopIteration
+                    cv2.destroyAllWindows()
+                    raise StopIteration
 
             # Save results (image with detections)
             if save_img:
@@ -296,7 +308,7 @@ if __name__ == '__main__':
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--update', action='store_true', help='update all models')
     parser.add_argument('--project', default='runs/detect', help='save results to project/name')
-    parser.add_argument('--name', default='object_tracking', help='save results to project/name')
+    parser.add_argument('--name', default='', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
     parser.add_argument('--colored-trk', action='store_true', help='assign different color to every track')
@@ -305,6 +317,8 @@ if __name__ == '__main__':
 
     parser.set_defaults(download=True)
     opt = parser.parse_args()
+    if opt.name == '':
+        opt.name = opt.source
     print(opt)
     #check_requirements(exclude=('pycocotools', 'thop'))
     if opt.download and not os.path.exists(''.join(opt.weights)):
