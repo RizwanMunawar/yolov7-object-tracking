@@ -1,5 +1,13 @@
 import mysql.connector
+from custom_logic.db.credentials import ConnectionConstants
 
+
+def get_db_connection():
+    return MySQLConnection(
+        ConnectionConstants.HOST,
+        ConnectionConstants.USERNAME,
+        ConnectionConstants.PASSWORD,
+        ConnectionConstants.DATABASE)
 
 class MySQLConnection:
     def __init__(self, host, user, password, database):
@@ -19,8 +27,8 @@ class MySQLConnection:
                 database=self.database
             )
 
-            if self.connection.is_connected():
-                print(f"Connected to MySQL server (Host: {self.host}, Database: {self.database})")
+            # if self.connection.is_connected():
+            #     print(f"Connected to MySQL server (Host: {self.host}, Database: {self.database})")
 
             return self.connection
 

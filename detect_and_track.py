@@ -1,30 +1,26 @@
-import os
 import cv2
-import time
 import torch
-import argparse
 from pathlib import Path
 from numpy import random
 from random import randint
 import torch.backends.cudnn as cudnn
+import custom_logic.services.tracking_service as tracking_service
+import custom_logic.repositories.video_repository as video_repository
+import custom_logic.repositories.tracking_object_repository as tracking_object_repository
 
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
-from utils.general import check_img_size, check_requirements, \
-    check_imshow, non_max_suppression, apply_classifier, \
-    scale_coords, xyxy2xywh, strip_optimizer, set_logging, \
+from utils.general import check_img_size, check_imshow, non_max_suppression, apply_classifier, \
+    scale_coords, strip_optimizer, set_logging, \
     increment_path
-from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, \
     time_synchronized, TracedModel
 from utils.download_weights import download
-from custom_logic.helper import get_video_info
+from custom_logic.helpers.helper import get_video_info
 from custom_logic.models.video import Video
 from custom_logic.models.tracking_object import TrackingObject
-from custom_logic.tracking_repository import insert_tracking_run, add_video, track_object_frame_data
 
 #For SORT tracking
-import skimage
 from sort import *
 
 #............................... Bounding Boxes Drawing ............................
@@ -61,15 +57,16 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None, save_wit
 
 
 def detect(save_img=False):
-    source, weights, view_img, save_txt, imgsz, trace, colored_trk, save_bbox_dim, save_with_object_id= opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace, opt.colored_trk, opt.save_bbox_dim, opt.save_with_object_id
+    source, weights, view_img, save_txt, imgsz, trace, colored_trk, save_bbox_dim, save_with_object_id, tilt_angle, camera_height, camera_id= opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace, opt.colored_trk, opt.save_bbox_dim, opt.save_with_object_id, opt.tilt_angle, opt.camera_height, opt.camera_id
     save_img = not opt.nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
 
-    total_frames, fps, duration_seconds = get_video_info(source)
-    video = Video(None, source, duration_seconds, total_frames)
-    video_id = add_video(video)
-    tracking_run_id = insert_tracking_run(video_id)
+    number_of_frames, fps, duration_seconds, _, _ = get_video_info(source)
+    video_title = source.split("/")[-1]
+    video = Video(None, video_title, duration_seconds, number_of_frames, tilt_angle, camera_height, camera_id)
+    video_id = video_repository.insert(video)
+    tracking_run_id = tracking_service.insert_tracking_run(video_id)
 
     #.... Initialize SORT .... 
     #......................... 
@@ -233,9 +230,9 @@ def detect(save_img=False):
                         if save_bbox_dim:
                             txt_str += " %f %f" % (np.abs(track.bbox_history[-1][0] - track.bbox_history[-1][2]) / im0.shape[0], np.abs(track.bbox_history[-1][1] - track.bbox_history[-1][3]) / im0.shape[1])
                         txt_str += "\n"
-                        
-                        tracking_object = TrackingObject(tracking_run_id, frame, track.id, track.detclass, track.centroidarr[-1][0], track.centroidarr[-1][1], np.abs(track.bbox_history[-1][0] - track.bbox_history[-1][2]), np.abs(track.bbox_history[-1][1] - track.bbox_history[-1][3]))
-                        track_object_frame_data(tracking_object)
+
+                        tracking_object = TrackingObject(None, tracking_run_id, frame, track.id, track.detclass, track.centroidarr[-1][0], track.centroidarr[-1][1], np.abs(track.bbox_history[-1][0] - track.bbox_history[-1][2]), np.abs(track.bbox_history[-1][1] - track.bbox_history[-1][3]), None)
+                        tracking_object_repository.insert(tracking_object)
 
                 if save_txt and not save_with_object_id:
                     with open(txt_path + '.txt', 'a') as f:
@@ -314,6 +311,9 @@ if __name__ == '__main__':
     parser.add_argument('--colored-trk', action='store_true', help='assign different color to every track')
     parser.add_argument('--save-bbox-dim', action='store_true', help='save bounding box dimensions with --save-txt tracks')
     parser.add_argument('--save-with-object-id', action='store_true', help='save results with object id to *.txt')
+    parser.add_argument('--tilt-angle', type=float, help='Tilt angel of the camera (degrees)')
+    parser.add_argument('--camera-height', type=float, help='The height of the camera position (mm)')
+    parser.add_argument('--camera-id', type=int, help='Unique identifier of the camera from db')
 
     parser.set_defaults(download=True)
     opt = parser.parse_args()

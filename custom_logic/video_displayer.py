@@ -1,0 +1,96 @@
+import cv2
+
+from custom_logic.models.tracking_object import TrackingObject
+from custom_logic.services.tracking_service import get_tracking_objects_for_video, group_tracking_objects
+from custom_logic.helpers.helper import get_video_info
+from datetime import datetime
+
+OUTPUT_PATH = "./video_output"
+
+
+def get_formatted_speed(speed: float):
+    return round(speed, 2)
+
+
+def save_video(frames, video_path):
+    _, fps, _, width, height = get_video_info(video_path)
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec (H264 for .mp4 format)
+
+    datetime_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    name = video_path.split("/")[-1]
+    out = cv2.VideoWriter(f'{OUTPUT_PATH}/{datetime_string}-{name}', fourcc, fps,
+                          (width, height))  # Filename, codec, fps, frame size
+
+    for frame in frames:
+        out.write(frame)
+
+
+class VideoDisplayer:
+    def __init__(self, video_path: str, tracking_run_id: int, is_save_video: bool):
+        self.video_path = video_path
+        self.tracking_run_id = tracking_run_id
+        self.is_save_video = is_save_video
+
+    objects_speed_dictionary = dict()
+
+    def display_video(self):
+        capture = cv2.VideoCapture(self.video_path)
+
+        _, fps, _, _, _ = get_video_info(self.video_path)
+
+        tracking_objects = get_tracking_objects_for_video(self.video_path, self.tracking_run_id)
+        tracking_objects_by_frame = group_tracking_objects(tracking_objects)
+        frame = 1
+
+        frame_images = list()
+
+        while capture.isOpened():
+            _, img_1 = capture.read()
+            if img_1 is None:
+                capture.release()
+                continue
+
+            frame_tracking_objects = tracking_objects_by_frame.get(frame)
+            self.drawFrameBoxes(img_1, frame_tracking_objects if frame_tracking_objects is not None else [])
+            frame += 1
+
+            cv2.imshow("Detecting Motion...", img_1)
+            if self.is_save_video:
+                frame_images.append(img_1)
+            if cv2.waitKey(int(1000 / fps)) == 13:
+                exit()
+
+        if self.is_save_video:
+            save_video(frame_images, self.video_path)
+
+    def drawFrameBoxes(self, img, trackingObjects: list[TrackingObject]):
+        if any(map(lambda obj: obj.speed is not None, trackingObjects)):
+            self.objects_speed_dictionary = dict()
+        for item in trackingObjects:
+            self.drawBox(img, item)
+
+    def drawBox(self, img, tracking_object: TrackingObject):
+        x1 = int(tracking_object.center_x - tracking_object.box_width / 2)
+        x2 = int(tracking_object.center_x + tracking_object.box_width / 2)
+        y1 = int(tracking_object.center_y - tracking_object.box_height / 2)
+        y2 = int(tracking_object.center_y + tracking_object.box_height / 2)
+        label = str(tracking_object.tracking_object_id)
+        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.putText(img, label, (x1, y2 - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5, [0, 0, 255], 2)
+
+        self.draw_speed(img, tracking_object, x1, y1)
+
+    def draw_speed(self, img, tracking_object: TrackingObject, left_x: int, top_y: int):
+        speed: int = None
+
+        if tracking_object.speed is not None:
+            speed = tracking_object.speed
+            self.objects_speed_dictionary[tracking_object.tracking_object_id] = speed
+        elif self.objects_speed_dictionary.get(tracking_object.tracking_object_id) is not None:
+            speed = self.objects_speed_dictionary.get(tracking_object.tracking_object_id)
+
+        if speed is not None:
+            cv2.putText(img, f"{get_formatted_speed(speed)} m/s", (left_x, top_y - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                        1, [0, 0, 255], 2)

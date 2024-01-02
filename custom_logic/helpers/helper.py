@@ -19,17 +19,11 @@ def get_video_info(video_path):
     # Calculate the duration of the video in seconds
     duration_seconds = total_frames / fps
 
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
     # Release the video capture object
     cap.release()
 
-    return total_frames, fps, duration_seconds
+    return total_frames, fps, duration_seconds, width, height
 
-# Example usage
-video_path = 'path/to/your/video.mp4'
-video_info = get_video_info(video_path)
-
-if video_info:
-    total_frames, fps, duration_seconds = video_info
-    print(f"Total Frames: {total_frames}")
-    print(f"Frames Per Second (fps): {fps}")
-    print(f"Duration (seconds): {duration_seconds}")
