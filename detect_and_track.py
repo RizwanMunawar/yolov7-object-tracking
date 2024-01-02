@@ -64,7 +64,7 @@ def detect(save_img=False):
 
     number_of_frames, fps, duration_seconds, _, _ = get_video_info(source)
     video_title = source.split("/")[-1]
-    video = Video(None, video_title, duration_seconds, number_of_frames, tilt_angle, camera_height, camera_id)
+    video = Video(None, video_title, duration_seconds, number_of_frames, camera_height, camera_id, tilt_angle)
     video_id = video_repository.insert(video)
     tracking_run_id = tracking_service.insert_tracking_run(video_id)
 

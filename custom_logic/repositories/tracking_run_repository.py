@@ -50,3 +50,13 @@ def insert(trackingRun: TrackingRun):
         cursor.execute(query, values)
         connection.commit()
 
+
+def clear_tracking_run_speed(tracking_run_id: int):
+    with get_db_connection() as connection:
+        cursor = connection.cursor()
+
+        query = f"UPDATE tracking_objects SET speed = null where tracking_run_id = {tracking_run_id}"
+
+        cursor.execute(query)
+        connection.commit()
+

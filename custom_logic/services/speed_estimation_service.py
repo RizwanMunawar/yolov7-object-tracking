@@ -32,6 +32,8 @@ def estimate_tracking_run_speed(trackingRunId: int):
         console_helper.print_error(f"No objects were found for tracking run {trackingRunId}")
         return
 
+    tracking_run_repository.clear_tracking_run_speed(trackingRunId)
+
     fps = video.Frames_number / video.Duration
     # how often estimation will be done
     number_of_frames_between_estimations = int(fps * ESTIMATION_GRANULARITY)

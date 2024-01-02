@@ -5,6 +5,8 @@ import custom_logic.repositories.video_repository as video_repository
 import custom_logic.repositories.camera_repository as camera_repository
 import math
 
+MAX_DEGREE_OF_MEASURING = 88
+
 
 def get_distance_measuring_config(video_title: str):
     video = video_repository.get_by_title(video_title)
@@ -26,18 +28,25 @@ class DistanceMeasurer:
         self.Config = get_distance_measuring_config(video_title)
 
     def get_distance(self, p1: Point, p2: Point) -> float:
-        # dx and dy in millimeters
-        dx = self.get_trapeze_big_base(p1, p2)
-        dy = self.get_dy(p1, p2)
+        # trapeze big base
+        a = self.get_dx_by_high_point(p1, p2)
+        # trapeze height
+        h = self.get_dy(p1, p2)
+        if h == 0:
+            return a / 1000
 
-        return math.sqrt(dx ** 2 + dy ** 2) / 1000
+        # angle near small base where diagonal starts
+        alpha = self.get_trapeze_angle(p1, p2)
 
-    def get_trapeze_big_base(self, p1: Point, p2: Point):
+        return h / (math.sin(math.atan(h / (a + h / math.tan(alpha))))) / 1000
+
+    # to get trapeze big base
+    def get_dx_by_high_point(self, p1: Point, p2: Point):
         # physical pixel size
         k = self.get_pixel_size()
 
         du = abs(p1.X - p2.X)
-        high_object, _ = self.get_high_and_low_objects(p1, p2)
+        high_object, _ = self.get_high_and_low_points(p1, p2)
 
         # distance between high object and center of the image vertically
         delta_high_object = int(abs(high_object.Y - self.Config.Resolution_height / 2))
@@ -46,7 +55,7 @@ class DistanceMeasurer:
         theta = math.radians(self.Config.Theta)
 
         # deviation from the center of the image vertically in radians
-        theta_i = math.atan(delta_high_object * k/ self.Config.f)
+        theta_i = math.atan(delta_high_object * k / self.Config.f)
 
         # Angle from high object ot vertical
         if high_object.Y < self.Config.Resolution_height / 2:
@@ -63,7 +72,7 @@ class DistanceMeasurer:
         high_object: Point
         low_object: Point
 
-        high_object, low_object = self.get_high_and_low_objects(p1, p2)
+        high_object, low_object = self.get_high_and_low_points(p1, p2)
 
         image_center = self.Config.Resolution_height / 2
         k = self.get_pixel_size()
@@ -82,7 +91,24 @@ class DistanceMeasurer:
             return self.Config.H * (math.tan(theta_radians + theta_high) -
                                     math.tan(theta_radians - theta_low))
 
-    def get_high_and_low_objects(self, p1: Point, p2: Point):
+    def get_trapeze_angle(self, p1: Point, p2: Point):
+        theta_max = min(MAX_DEGREE_OF_MEASURING - self.Config.Theta, self.Config.Vertical_viewing_angle / 2)
+        theta_max_radians = math.radians(theta_max)
+        theta_radians = math.radians(self.Config.Theta)
+
+        M = Point(int(self.Config.Resolution_width / 2), self.get_degree_coordinate(self.Config.Theta + theta_max))
+        _, point = self.get_high_and_low_points(p1, p2)
+        FM = self.get_dx_by_high_point(M, point)
+
+        if FM == 0:
+            return math.pi / 2
+
+        LM = self.Config.H * (
+            math.tan(theta_radians + theta_max_radians) + 1 / math.tan(theta_radians))
+        alpha = math.atan(LM / FM)
+        return alpha
+
+    def get_high_and_low_points(self, p1: Point, p2: Point):
         if p1.Y < p2.Y:
             high_object = p1
             low_object = p2
@@ -91,6 +117,13 @@ class DistanceMeasurer:
             low_object = p1
 
         return high_object, low_object
+
+    def get_point_closer_to_center_horizontally(self, p1: Point, p2: Point):
+        center = int(self.Config.Resolution_width / 2)
+        if abs(p1.X - center) < abs(p2.X - center):
+            return p1
+        else:
+            return p2
 
     def get_pixel_size(self):
         return self.Config.Sensor_size / (

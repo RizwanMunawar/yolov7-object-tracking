@@ -48,8 +48,8 @@ def insert(video: Video):
     with get_db_connection() as connection:
         cursor = connection.cursor()
 
-        query = "INSERT INTO videos (title, duration, frames_number, tilt_angle, camera_height, camera_id) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (video.Title, video.Duration, video.Frames_number, video.Tilt_angle, video.Camera_height, video.Camera_id)
+        query = "INSERT INTO videos (title, duration, frames_number, camera_height, camera_id, tilt_angle) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (video.Title, video.Duration, video.Frames_number, video.Camera_height, video.Camera_id, video.Tilt_angle)
 
         cursor.execute(query, values)
         cursor.close()

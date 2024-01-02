@@ -1,4 +1,4 @@
-from custom_logic.distance_measurer import DistanceMeasurer
+from custom_logic.distance_measurer import DistanceMeasurer, MAX_DEGREE_OF_MEASURING
 from custom_logic.models.point import Point
 
 import cv2
@@ -38,20 +38,26 @@ class DistanceMeter:
         if event == cv2.EVENT_LBUTTONDOWN:
             point = Point(x, y)
             self.points.append(point)
-            self.display_point(point)
+
 
             if len(self.points) == 2:
                 distance = self.calculate_distance(self.points[0], self.points[1])
                 self.display_text(f"Distance: {distance:.2f}", (10, 50))
-                self.display_line(self.points[0], self.points[1])
-                self.points = []  # Reset points after calculating distance
+                self.display_line(self.work_image, self.points[0], self.points[1])
             else:
                 self.work_image = self.get_work_image()
-                self.display_point(point)
 
+            self.display_point(point)
+            self.add_points_text(point)
+
+            if len(self.points) == 2:
+                self.points = []  # Reset points after calculating distance
+
+    def add_points_text(self, point: Point):
+        self.display_text(f"({point.X}, {point.Y})", (self.Distance_measurer.Config.Resolution_width - 400, 60 * len(self.points)))
     def display_text(self, text, position):
         font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 2
+        font_scale = 1.5
         font_thickness = 3
         color = (0, 0, 255)
 
@@ -60,16 +66,17 @@ class DistanceMeter:
     def display_point(self, point: Point):
         cv2.circle(self.work_image, (point.X, point.Y), 5, (0, 0, 184), -1)
 
-    def display_line(self, p1: Point, p2: Point):
-        cv2.line(self.work_image, (p1.X, p1.Y), (p2.X, p2.Y), (0, 152, 255), 2)
+    def display_line(self, image, p1: Point, p2: Point):
+        cv2.line(image, (int(p1.X), int(p1.Y)), (int(p2.X), int(p2.Y)), (0, 0, 0), 2)
 
     def get_work_image(self):
         image = copy.copy(self.initial_image)
-        y85 = self.Distance_measurer.get_degree_coordinate(85)
-        y90 = self.Distance_measurer.get_degree_coordinate(90)
+        max_degree_y = self.Distance_measurer.get_degree_coordinate(MAX_DEGREE_OF_MEASURING)
 
-        image = self.draw_top_rectangle(image, y90, 0.2, 90)
-        image = self.draw_top_rectangle(image, y85, 0.2, 85)
+        image = self.draw_top_rectangle(image, max_degree_y, 0.4, MAX_DEGREE_OF_MEASURING)
+
+        self.display_line(image, Point(self.Distance_measurer.Config.Resolution_width/2, 0), Point(self.Distance_measurer.Config.Resolution_width/2, self.Distance_measurer.Config.Resolution_height))
+        self.display_line(image, Point(0, self.Distance_measurer.Config.Resolution_height/2), Point(self.Distance_measurer.Config.Resolution_width, self.Distance_measurer.Config.Resolution_height / 2))
 
         return image
 
