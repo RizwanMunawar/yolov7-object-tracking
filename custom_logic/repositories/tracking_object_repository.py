@@ -55,12 +55,12 @@ def insert(trackingObject: TrackingObject):
             cursor.close()
 
 
-def set_speed(tracking_object_id: int, speed: float):
+def set_speed_and_distance(tracking_object_id: int, speed: float, distance: float):
     with get_db_connection() as connection:
         if connection:
             # Perform database operations here
             cursor = connection.cursor()
-            query = f"UPDATE tracking_objects SET speed = {speed} WHERE id = {tracking_object_id}"
+            query = f"UPDATE tracking_objects SET speed = {speed}, distance = {distance} WHERE id = {tracking_object_id}"
             # Example: Execute a query
             cursor.execute(query)
             cursor.close()

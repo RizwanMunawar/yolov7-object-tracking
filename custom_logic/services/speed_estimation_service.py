@@ -32,7 +32,7 @@ def estimate_tracking_run_speed(trackingRunId: int):
         console_helper.print_error(f"No objects were found for tracking run {trackingRunId}")
         return
 
-    tracking_run_repository.clear_tracking_run_speed(trackingRunId)
+    tracking_run_repository.clear_tracking_run_calculated_data(trackingRunId)
 
     fps = video.Frames_number / video.Duration
     # how often estimation will be done
@@ -68,5 +68,5 @@ def estimate_frames(previous_frame: list[TrackingObject], current_frame: list[Tr
         if previous_tracking_object is None:
             continue
 
-        speed = speed_estimator.get_estimated_speed(previous_tracking_object, tracking_object)
-        tracking_object_repository.set_speed(tracking_object.id, speed)
+        speed, distance = speed_estimator.get_estimated_speed_and_distance(previous_tracking_object, tracking_object)
+        tracking_object_repository.set_speed_and_distance(tracking_object.id, speed, distance)

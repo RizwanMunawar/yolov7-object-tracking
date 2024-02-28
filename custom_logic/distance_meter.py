@@ -4,6 +4,7 @@ from custom_logic.models.point import Point
 import cv2
 import copy
 import numpy as np
+import custom_logic.repositories.tracking_object_repository as tracking_object_repository
 
 
 def get_image(video_path: str):
@@ -23,11 +24,13 @@ def get_image(video_path: str):
 
 
 class DistanceMeter:
-    def __init__(self, video_path: str):
+    def __init__(self, video_path: str, tracking_run_id: int = None):
         video_title = video_path.split("/")[-1]
         self.Distance_measurer = DistanceMeasurer(video_title)
         self.points: list[Point] = []
         self.initial_image = get_image(video_path)
+        self.tracked_points = []
+        self.init_tracking_run_points(tracking_run_id)
         self.work_image = self.get_work_image()
 
     def calculate_distance(self, p1: Point, p2: Point):
@@ -39,7 +42,6 @@ class DistanceMeter:
             point = Point(x, y)
             self.points.append(point)
 
-
             if len(self.points) == 2:
                 distance = self.calculate_distance(self.points[0], self.points[1])
                 self.display_text(f"Distance: {distance:.2f}", (10, 50))
@@ -47,14 +49,16 @@ class DistanceMeter:
             else:
                 self.work_image = self.get_work_image()
 
-            self.display_point(point)
+            self.display_point(self.work_image, point)
             self.add_points_text(point)
 
             if len(self.points) == 2:
                 self.points = []  # Reset points after calculating distance
 
     def add_points_text(self, point: Point):
-        self.display_text(f"({point.X}, {point.Y})", (self.Distance_measurer.Config.Resolution_width - 400, 60 * len(self.points)))
+        self.display_text(f"({point.X}, {point.Y})",
+                          (self.Distance_measurer.Config.Resolution_width - 400, 60 * len(self.points)))
+
     def display_text(self, text, position):
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 1.5
@@ -63,8 +67,8 @@ class DistanceMeter:
 
         cv2.putText(self.work_image, text, position, font, font_scale, color, font_thickness, cv2.LINE_AA)
 
-    def display_point(self, point: Point):
-        cv2.circle(self.work_image, (point.X, point.Y), 5, (0, 0, 184), -1)
+    def display_point(self, image, point: Point):
+        cv2.circle(image, (point.X, point.Y), 5, (0, 0, 184), -1)
 
     def display_line(self, image, p1: Point, p2: Point):
         cv2.line(image, (int(p1.X), int(p1.Y)), (int(p2.X), int(p2.Y)), (0, 0, 0), 2)
@@ -75,9 +79,13 @@ class DistanceMeter:
 
         image = self.draw_top_rectangle(image, max_degree_y, 0.4, MAX_DEGREE_OF_MEASURING)
 
-        self.display_line(image, Point(self.Distance_measurer.Config.Resolution_width/2, 0), Point(self.Distance_measurer.Config.Resolution_width/2, self.Distance_measurer.Config.Resolution_height))
-        self.display_line(image, Point(0, self.Distance_measurer.Config.Resolution_height/2), Point(self.Distance_measurer.Config.Resolution_width, self.Distance_measurer.Config.Resolution_height / 2))
-
+        self.display_line(image, Point(self.Distance_measurer.Config.Resolution_width / 2, 0),
+                          Point(self.Distance_measurer.Config.Resolution_width / 2,
+                                self.Distance_measurer.Config.Resolution_height))
+        self.display_line(image, Point(0, self.Distance_measurer.Config.Resolution_height / 2),
+                          Point(self.Distance_measurer.Config.Resolution_width,
+                                self.Distance_measurer.Config.Resolution_height / 2))
+        list(map(lambda x: self.display_point(image, x), self.tracked_points))
         return image
 
     def draw_top_rectangle(self, image, y: int, opacity: float, degree: float = None):
@@ -99,6 +107,14 @@ class DistanceMeter:
 
             cv2.putText(result_image, text, text_position, font, font_size, text_color, font_thickness)
         return result_image
+
+    def init_tracking_run_points(self, tracking_run_id: int = None):
+        if tracking_run_id is None:
+            return
+
+        tracking_objects = tracking_object_repository.get_by_tracking_run_id(tracking_run_id)
+        tracked_objects = filter(lambda x: x.speed is not None, tracking_objects)
+        self.tracked_points = [Point(obj.center_x, int(obj.center_y + obj.box_height / 2)) for obj in tracked_objects]
 
     def start(self):
         cv2.namedWindow("Image")

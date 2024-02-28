@@ -12,11 +12,11 @@ class SpeedEstimator:
         self.Estimation_granularity = estimation_granularity
 
 
-    def get_estimated_speed(self, first_tracking_object: TrackingObject,
-                            second_tracking_object: TrackingObject) -> float:
+    def get_estimated_speed_and_distance(self, first_tracking_object: TrackingObject,
+                                         second_tracking_object: TrackingObject) -> float:
         p1 = get_tracking_point(first_tracking_object)
         p2 = get_tracking_point(second_tracking_object)
         distance = self.Distance_measurer.get_distance(p1, p2)
         speed = distance / self.Estimation_granularity
         print(f"Object {first_tracking_object.tracking_object_id} speed - {speed} m/s")
-        return speed
+        return speed, distance

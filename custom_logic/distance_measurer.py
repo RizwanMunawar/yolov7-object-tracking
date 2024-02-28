@@ -97,8 +97,8 @@ class DistanceMeasurer:
         theta_radians = math.radians(self.Config.Theta)
 
         M = Point(int(self.Config.Resolution_width / 2), self.get_degree_coordinate(self.Config.Theta + theta_max))
-        _, point = self.get_high_and_low_points(p1, p2)
-        FM = self.get_dx_by_high_point(M, point)
+        high_point, low_point = self.get_high_and_low_points(p1, p2)
+        FM = self.get_dx_by_high_point(M, low_point)
 
         if FM == 0:
             return math.pi / 2
@@ -106,6 +106,10 @@ class DistanceMeasurer:
         LM = self.Config.H * (
             math.tan(theta_radians + theta_max_radians) + 1 / math.tan(theta_radians))
         alpha = math.atan(LM / FM)
+
+        # there is a difference whether vector moves from the center to the sides or opposite
+        # if abs(high_point.X - M.X) < abs(low_point.X - M.X):
+        #     alpha = math.pi - alpha
         return alpha
 
     def get_high_and_low_points(self, p1: Point, p2: Point):

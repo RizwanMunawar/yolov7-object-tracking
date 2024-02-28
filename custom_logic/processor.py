@@ -2,6 +2,7 @@ import argparse
 from custom_logic.services.speed_estimation_service import estimate_tracking_run_speed
 from custom_logic.video_displayer import VideoDisplayer
 from custom_logic.distance_meter import DistanceMeter
+from custom_logic.calibrator import Calibrator
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Processor of custom actions.")
@@ -33,7 +34,24 @@ if __name__ == "__main__":
         if args.video_path is None:
             print("video-path is required")
         else:
-            distance_meter = DistanceMeter(args.video_path)
+            distance_meter = DistanceMeter(args.video_path, args.tracking_run_id)
             distance_meter.start()
-    else:
+    elif args.action == "calibrate":
+        if args.video_path is None:
+            print("video-path is required")
+        else:
+            calibrator = Calibrator(args.video_path)
+            calibrator.run()
+    elif args.action == "custom":
+        video_path = "./video_sources/Test_video_3_correct.mp4"
+        tracking_run_id = 12
+
+        # Estimate speed
+        # estimate_tracking_run_speed(tracking_run_id)
+
+        # Show video
+        is_save_video = False
+        video_displayer = VideoDisplayer(video_path, tracking_run_id, is_save_video)
+        video_displayer.display_video()
+else:
         print("Command not found")
