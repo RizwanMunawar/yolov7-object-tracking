@@ -13,7 +13,7 @@ for ((i=1; i<=$num_runs; i++)); do
     start_time=$(date +"%Y-%m-%d %H:%M:%S.%N")
 
     # Run the Python command and store the output in output.txt
-    { time python detect.py --weights yolov7.pt --source "pexels_videos_2670 (1080p).mp4"; } 2>> output.txt
+    { time python detect.py --weights yolov7.pt --source "pexels_videos_2670(1080p).mp4"; } 2>> output.txt
 
     # Record the end time
     end_time=$(date +"%Y-%m-%d %H:%M:%S.%N")
