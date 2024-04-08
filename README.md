@@ -68,6 +68,7 @@ python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --color
 python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --save-txt --save-bbox-dim
 ```
 
+
 - Output file will be created in the ```working-dir/runs/detect/obj-tracking``` with original filename
 
 
