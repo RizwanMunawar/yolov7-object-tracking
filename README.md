@@ -12,20 +12,27 @@
 - https://colab.research.google.com/drive/1xrB76UQ_LaVaBAxfTi8-a9dIcazmxD5b?usp=sharing
 ### Steps to run Code
 - Clone the repository.
-```
+```bash
 git clone https://github.com/RizwanMunawar/yolov7-object-tracking.git
 ```
 - Goto the cloned folder.
-```
+```bash
 cd yolov7-object-tracking
 ```
 - Create a virtual envirnoment (Recommended, If you dont want to disturb python packages)
-```
+
 ### For Linux Users
 python3 -m venv yolov7objtracking
 source yolov7objtracking/bin/activate
 
+### For conda
+```bash
+conda create -n yolov7objtracking python=3.10
+conda activate yolov7objtracking
+```
+
 ### For Window Users
+```bash
 python3 -m venv yolov7objtracking
 cd yolov7objtracking
 cd Scripts
@@ -33,16 +40,17 @@ activate
 cd ..
 cd ..
 ```
-- Upgrade pip with mentioned command below.
-```
+
+
+```bash
+# Upgrade pip with mentioned command below.
 pip install --upgrade pip
-```
-- Install requirements with mentioned command below.
-```
+# Install requirements with mentioned command below.
+
 pip install -r requirements.txt
 ```
 - Run the code with mentioned command below (by default, pretrained [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) weights will be automatically downloaded into the working directory if they don't already exist).
-```
+```bash
 # for detection only
 python detect.py --weights yolov7.pt --source "your video.mp4"
 
