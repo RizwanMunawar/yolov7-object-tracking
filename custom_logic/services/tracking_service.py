@@ -1,3 +1,5 @@
+from typing import List
+
 import custom_logic.repositories.video_repository as video_repository
 import custom_logic.repositories.tracking_run_repository as tracking_run_repository
 import custom_logic.repositories.tracking_object_repository as tracking_object_repository
@@ -30,6 +32,6 @@ def get_tracking_objects_for_video(name, tracking_run_id=None):
     return tracking_object_repository.get_by_tracking_run_id(tracking_run_id)
 
 
-def group_tracking_objects(tracking_objects: list[TrackingObject]):
+def group_tracking_objects(tracking_objects: List[TrackingObject]):
     return {key: [item for item in tracking_objects if item.frame_number == key] for key in
             set(map(lambda item: item.frame_number, tracking_objects))}

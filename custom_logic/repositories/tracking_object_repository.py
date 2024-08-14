@@ -1,3 +1,5 @@
+from typing import List
+
 from custom_logic.db.db_connection import get_db_connection
 from custom_logic.models.tracking_object import TrackingObject
 
@@ -21,7 +23,7 @@ def get(id: int) -> TrackingObject:
     return None
 
 
-def get_by_tracking_run_id(tracking_run_id: int) -> list[TrackingObject]:
+def get_by_tracking_run_id(tracking_run_id: int) -> List[TrackingObject]:
     with get_db_connection() as connection:
         cursor = connection.cursor()
 

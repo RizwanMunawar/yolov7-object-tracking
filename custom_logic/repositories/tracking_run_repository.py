@@ -1,3 +1,5 @@
+from typing import List
+
 from custom_logic.db.db_connection import get_db_connection
 from custom_logic.models.tracking_run import TrackingRun
 
@@ -19,7 +21,7 @@ def get(id: int) -> TrackingRun:
     return None
 
 
-def get_by_video_id(video_id: int) -> list[TrackingRun]:
+def get_by_video_id(video_id: int) -> List[TrackingRun]:
     with get_db_connection() as connection:
         cursor = connection.cursor()
 
