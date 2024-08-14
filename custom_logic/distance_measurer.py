@@ -136,7 +136,7 @@ class DistanceMeasurer:
     def get_degree_coordinate(self, degree: int):
         pixel_size = self.get_pixel_size()
         if self.Config.Theta + self.Config.Vertical_viewing_angle / 2 < degree:
-            return self.Config.Resolution_height
+            return self.Config.Resolution_height-1
         elif self.Config.Theta - self.Config.Vertical_viewing_angle / 2 > degree:
             return 0
 

@@ -1,3 +1,5 @@
+from typing import List
+
 from custom_logic.distance_measurer import DistanceMeasurer, MAX_DEGREE_OF_MEASURING
 from custom_logic.models.point import Point
 
@@ -27,7 +29,7 @@ class DistanceMeter:
     def __init__(self, video_path: str, tracking_run_id: int = None):
         video_title = video_path.split("/")[-1]
         self.Distance_measurer = DistanceMeasurer(video_title)
-        self.points: list[Point] = []
+        self.points: List[Point] = []
         self.initial_image = get_image(video_path)
         self.tracked_points = []
         self.init_tracking_run_points(tracking_run_id)

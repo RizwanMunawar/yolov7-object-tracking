@@ -10,6 +10,7 @@ if __name__ == "__main__":
     parser.add_argument("--tracking-run-id", type=int, help="TrackingRunId. Required for estimate-tracking-run-speed action")
     parser.add_argument("--video-path", type=str, help="Video path")
     parser.add_argument("--save-video", type=bool, help="Is save video")
+    parser.add_argument("--draw-track", type=bool, help="Is draw tracks")
 
     args = parser.parse_args()
 
@@ -28,7 +29,12 @@ if __name__ == "__main__":
             is_save_video = args.save_video
             if is_save_video is None:
                 is_save_video = False
-            video_displayer = VideoDisplayer(args.video_path, args.tracking_run_id, is_save_video)
+
+            is_draw_track = args.draw_track
+            if is_draw_track is None:
+                is_draw_track = False
+
+            video_displayer = VideoDisplayer(args.video_path, args.tracking_run_id, is_save_video, is_draw_track)
             video_displayer.display_video()
     elif args.action == "distance-meter":
         if args.video_path is None:

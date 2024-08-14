@@ -1,3 +1,5 @@
+from typing import List
+
 import custom_logic.services.tracking_service as tracking_service
 import custom_logic.repositories.tracking_object_repository as tracking_object_repository
 import custom_logic.repositories.video_repository as video_repository
@@ -60,7 +62,7 @@ def estimate_tracking_run_speed(trackingRunId: int):
         previous_frame = current_frame
 
 
-def estimate_frames(previous_frame: list[TrackingObject], current_frame: list[TrackingObject], speed_estimator: SpeedEstimator):
+def estimate_frames(previous_frame: List[TrackingObject], current_frame: List[TrackingObject], speed_estimator: SpeedEstimator):
     for tracking_object in current_frame:
         filtered = filter(lambda x: x.tracking_object_id == tracking_object.tracking_object_id, previous_frame)
         previous_tracking_object = next(filtered, None)
