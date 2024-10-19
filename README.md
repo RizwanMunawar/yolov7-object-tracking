@@ -1,131 +1,123 @@
-# yolov7-object-tracking
+## YOLOv7 Object Tracking 🚀
 
-### New Features
-- Added Label for Every Track
-- Code can run on Both (CPU & GPU)
-- Video/WebCam/External Camera/IP Stream Supported
+### New Features ✨
+- 🏷️ Added Label for Every Track
+- ⚡ Runs on both CPU & GPU
+- 🎥 Supports Video, Webcam, External Camera, and IP Stream
 
-### Coming Soon
-- Development of streamlit dashboard for Object Tracking
+### Coming Soon 🔄
+- 🛠️ Development of a Streamlit Dashboard for Object Tracking
 
-### 🔗 Ready to Use Google Colab
-- https://colab.research.google.com/drive/1xrB76UQ_LaVaBAxfTi8-a9dIcazmxD5b?usp=sharing
-### Steps to run Code
-1. Clone the repository.
+### Ready-to-Use Google Colab 🔗 [Launch Colab](https://colab.research.google.com/drive/1xrB76UQ_LaVaBAxfTi8-a9dIcazmxD5b?usp=sharing)
+
+### How to Run the Code 🖥️
+1. **Clone the repository:**
     ```bash
     git clone https://github.com/RizwanMunawar/yolov7-object-tracking.git
     ```
-2. Goto the cloned folder.
+2. **Navigate to the cloned folder:**
     ```bash
     cd yolov7-object-tracking
     ```
-3. Create a virtual envirnoment (Recommended, If you dont want to disturb python packages)
 
-    #### For Anaconda
+3. **Create a virtual environment (Recommended to avoid conflicts):**
+
+    #### For Anaconda:
     ```bash
-    # Create the virtural envirnment
     conda create -n yolov7objtracking python=3.10
-
-    # Activate the virtural envirnment
     conda activate yolov7objtracking
     ```
 
-    #### For Linux Users
+    #### For Linux:
     ```bash
-    # Create the virtural envirnment
     python3 -m venv yolov7objtracking
-
-    # Activate the virtural envirnment
     source yolov7objtracking/bin/activate
     ```
 
-    #### For Window Users
+    #### For Windows:
     ```bash
-    # Create the virtural envirnment
     python3 -m venv yolov7objtracking
-
-    # Activate the virtural envirnment
-    cd yolov7objtracking
-    cd Scripts
+    cd yolov7objtracking/Scripts
     activate
-    cd ..
-    cd ..
     ```
 
-4. Update pip and install libraries
+4. **Update pip and install dependencies:**
     ```bash
-    # Upgrade pip with mentioned command below.
     pip install --upgrade pip
-
-    # Install requirements with mentioned command below.
     pip install -r requirements.txt
     ```
 
-5. Run the script
-   
-    Select the appropirate command from the following list of command according to your need.
-    (by default, pretrained [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) weights will be automatically downloaded into the working directory if they don't already exist).
+5. **Run the script:**
 
-    ```bash
-    # for detection only
-    python detect.py --weights yolov7.pt --source "your video.mp4"
+    Select the appropriate command based on your requirements. Pretrained [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) weights will be downloaded automatically if needed.
 
-    #if you want to change source file
-    python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
+    - Detection only:
+      ```bash
+      python detect.py --weights yolov7.pt --source "your video.mp4"
+      ```
 
-    #for WebCam
-    python detect_and_track.py --weights yolov7.pt --source 0
+    - Object tracking:
+      ```bash
+      python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
+      ```
 
-    #for External Camera
-    python detect_and_track.py --weights yolov7.pt --source 1
+    - Webcam:
+      ```bash
+      python detect_and_track.py --weights yolov7.pt --source 0
+      ```
 
-    #For LiveStream (Ip Stream URL Format i.e "rtsp://username:pass@ipaddress:portno/video/video.amp")
-    python detect_and_track.py --source "your IP Camera Stream URL" --device 0
+    - External Camera:
+      ```bash
+      python detect_and_track.py --weights yolov7.pt --source 1
+      ```
 
-    #for specific class (person)
-    python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --classes 0
+    - IP Camera Stream:
+      ```bash
+      python detect_and_track.py --source "your IP Camera Stream URL" --device 0
+      ```
 
-    #for colored tracks 
-    python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --colored-trk
+    - Specific class tracking (e.g., person):
+      ```bash
+      python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --classes 0
+      ```
 
-    #for saving tracks centroid, track id and bbox coordinates
-    python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --save-txt --save-bbox-dim
-    ```
+    - Colored tracks:
+      ```bash
+      python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --colored-trk
+      ```
 
-6. Output file will be created in the `working-dir/runs/detect/obj-tracking` with original filename.
+    - Save track centroids, IDs, and bounding box coordinates:
+      ```bash
+      python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --save-txt --save-bbox-dim
+      ```
 
+6. **Output files** will be saved in `working-dir/runs/detect/obj-tracking` with the original filename.
 
-### Results
+### Results 📊
 <table>
   <tr>
     <td>YOLOv7 Detection Only</td>
     <td>YOLOv7 Object Tracking with ID</td>
-    <td>YOLOv7 Object Tracking with ID and Label </td>
+    <td>YOLOv7 Object Tracking with ID and Label</td>
   </tr>
   <tr>
     <td><img src="https://user-images.githubusercontent.com/62513924/196107891-bb8124de-99c6-4039-b556-2ade403bd985.png"></td>
     <td><img src="https://user-images.githubusercontent.com/62513924/185798283-0455ce49-4359-4e52-8d69-fd30dd61c5b4.png"></td>
-     <td><img src="https://user-images.githubusercontent.com/62513924/191241661-ed5b87eb-5c8c-49bc-8301-531ee86f3b38.png"></td>
+    <td><img src="https://user-images.githubusercontent.com/62513924/191241661-ed5b87eb-5c8c-49bc-8301-531ee86f3b38.png"></td>
   </tr>
- </table>
+</table>
 
+### References 🔗
+- [YOLOv7 GitHub](https://github.com/WongKinYiu/yolov7)
+- [SORT GitHub](https://github.com/abewley/sort)
 
- ### References
- - https://github.com/WongKinYiu/yolov7
- - https://github.com/abewley/sort
+### My Medium Articles ✍️
+- [Maximizing Efficiency on Construction Sites 🔥](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/04/maximizing-efficiency-on-construction.html)
+- [Instance Segmentation vs Semantic Segmentation ✅](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/instance-segmentation-vs-semantic.html)
+- [Mastering Image Classification 🔥](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/mastering-image-classification.html)
+- [Object Detection in Agriculture ✅](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-detection-in-agriculture.html)
+- [Techniques for Accurate Data Annotation ✅](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/techniques-for-accurate-data-annotation.html)
+- [Object Tracking Using ByteTrack 🔥](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-tracking-using-bytetrack.html)
+- [Pose Estimation in Computer Vision ✅](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/pose-estimation-computer-vision.html)
 
-### My Medium Articles
-- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/04/maximizing-efficiency-on-construction.html 🔥
-- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/instance-segmentation-vs-semantic.html ✅
-- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/mastering-image-classification.html 🔥
-- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-detection-in-agriculture.html ✅
-- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/techniques-for-accurate-data-annotation.html ✅
-- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-tracking-using-bytetrack.html 🔥
-- https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/pose-estimation-computer-vision.html ✅
-- https://medium.com/augmented-startups/yolov7-training-on-custom-data-b86d23e6623
-- https://medium.com/augmented-startups/roadmap-for-computer-vision-engineer-45167b94518c
-- https://medium.com/augmented-startups/yolor-or-yolov5-which-one-is-better-2f844d35e1a1
-- https://medium.com/augmented-startups/train-yolor-on-custom-data-f129391bd3d6
-- https://medium.com/augmented-startups/develop-an-analytics-dashboard-using-streamlit-e6282fa5e0f
-
-For more details, you can reach out to me on [Medium](https://chr043416.medium.com/) or can connect with me on [LinkedIn](https://www.linkedin.com/in/muhammadrizwanmunawar/)
+For more details, you can reach me on [Medium](https://muhammadrizwanmunawar.medium.com/) or [LinkedIn](https://www.linkedin.com/in/muhammadrizwanmunawar/).
