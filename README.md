@@ -112,12 +112,12 @@
 - [SORT GitHub](https://github.com/abewley/sort)
 
 ### My Medium Articles ✍️
-- [Maximizing Efficiency on Construction Sites 🔥](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/04/maximizing-efficiency-on-construction.html)
-- [Instance Segmentation vs Semantic Segmentation ✅](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/instance-segmentation-vs-semantic.html)
-- [Mastering Image Classification 🔥](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/mastering-image-classification.html)
-- [Object Detection in Agriculture ✅](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-detection-in-agriculture.html)
-- [Techniques for Accurate Data Annotation ✅](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/techniques-for-accurate-data-annotation.html)
-- [Object Tracking Using ByteTrack 🔥](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-tracking-using-bytetrack.html)
-- [Pose Estimation in Computer Vision ✅](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/pose-estimation-computer-vision.html)
+- [Maximizing Efficiency on Construction Sites](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/04/maximizing-efficiency-on-construction.html)
+- [Instance Segmentation vs Semantic Segmentation](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/instance-segmentation-vs-semantic.html)
+- [Mastering Image Classification](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/mastering-image-classification.html)
+- [Object Detection in Agriculture](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-detection-in-agriculture.html)
+- [Techniques for Accurate Data Annotation](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/techniques-for-accurate-data-annotation.html)
+- [Object Tracking Using ByteTrack](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/object-tracking-using-bytetrack.html)
+- [Pose Estimation in Computer Vision](https://muhammadrizwanmunawarvisionai.blogspot.com/2023/03/pose-estimation-computer-vision.html)
 
 For more details, you can reach me on [Medium](https://muhammadrizwanmunawar.medium.com/) or [LinkedIn](https://www.linkedin.com/in/muhammadrizwanmunawar/).
