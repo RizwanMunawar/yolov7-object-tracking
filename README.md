@@ -5,9 +5,6 @@
 - ⚡ Runs on both CPU & GPU
 - 🎥 Supports Video, Webcam, External Camera, and IP Stream
 
-### Coming Soon 🔄
-- 🛠️ Development of a Streamlit Dashboard for Object Tracking
-
 ### Ready-to-Use Google Colab 🔗 [Launch Colab](https://colab.research.google.com/drive/1xrB76UQ_LaVaBAxfTi8-a9dIcazmxD5b?usp=sharing)
 
 ### How to Run the Code 🖥️
