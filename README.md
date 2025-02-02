@@ -1,51 +1,52 @@
 ## YOLOv7 Object Tracking 🚀
 
 ### Features
-- 🏷️ Added Label for Every Track
-- ⚡ Runs on both CPU & GPU
-- 🎥 Supports Video, Webcam, External Camera, and IP Stream
+- Added Label for Every Track
+- Runs on both CPU & GPU
+- Supports Video, Webcam, External Camera, and IP Stream
 
-### Ready-to-Use Google Colab 🔗 [Launch Colab](https://colab.research.google.com/drive/1xrB76UQ_LaVaBAxfTi8-a9dIcazmxD5b?usp=sharing)
+[Launch Colab](https://colab.research.google.com/drive/1xrB76UQ_LaVaBAxfTi8-a9dIcazmxD5b?usp=sharing)
 
-### How to Run the Code 🖥️
+### How to Run the Code
 
-1. **Clone the repository:**
+1. Clone the repository:
+   
     ```bash
     git clone https://github.com/RizwanMunawar/yolov7-object-tracking.git
     ```
-2. **Navigate to the cloned folder:**
+3. Navigate to the cloned folder:
     ```bash
     cd yolov7-object-tracking
     ```
 
-3. **Create a virtual environment (Recommended to avoid conflicts):**
+4. Create a virtual environment (Recommended to avoid conflicts):
 
-    #### For Anaconda:
+    For Anaconda:
     ```bash
     conda create -n yolov7objtracking python=3.10
     conda activate yolov7objtracking
     ```
 
-    #### For Linux:
+    For Linux:
     ```bash
     python3 -m venv yolov7objtracking
     source yolov7objtracking/bin/activate
     ```
 
-    #### For Windows:
+    For Windows:
     ```bash
     python3 -m venv yolov7objtracking
     cd yolov7objtracking/Scripts
     activate
     ```
 
-4. **Update pip and install dependencies:**
+5. Update pip and install dependencies:
     ```bash
     pip install --upgrade pip
     pip install -r requirements.txt
     ```
 
-5. **Run the script:**
+6. Run the script:
 
     Select the appropriate command based on your requirements. Pretrained [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) weights will be downloaded automatically if needed.
 
@@ -89,7 +90,7 @@
       python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --save-txt --save-bbox-dim
       ```
 
-6. **Output files** will be saved in `working-dir/runs/detect/obj-tracking` with the original filename.
+7. **Output files** will be saved in `working-dir/runs/detect/obj-tracking` with the original filename.
 
 ### Results 📊
 <table>
@@ -105,7 +106,8 @@
   </tr>
 </table>
 
-### References 🔗
+### References
+
 - [YOLOv7 GitHub](https://github.com/WongKinYiu/yolov7)
 - [SORT GitHub](https://github.com/abewley/sort)
 
