@@ -1,11 +1,6 @@
 ## YOLOv7 Object Tracking 🚀
 
-### Features
-- Added Label for Every Track
-- Runs on both CPU & GPU
-- Supports Video, Webcam, External Camera, and IP Stream
-
-[Launch Colab](https://colab.research.google.com/drive/1xrB76UQ_LaVaBAxfTi8-a9dIcazmxD5b?usp=sharing)
+<a href="https://colab.research.google.com/drive/1xrB76UQ_LaVaBAxfTi8-a9dIcazmxD5b?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
 
 ### How to Run the Code
 
