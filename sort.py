@@ -260,7 +260,8 @@ class Sort(object):
         for trk in reversed(self.trackers):
             d = trk.get_state()[0]
             if (trk.time_since_update < 1) and (trk.hit_streak >= self.min_hits or self.frame_count <= self.min_hits):
-                ret.append(np.concatenate((d, [trk.id+1])).reshape(1,-1)) #+1'd because MOT benchmark requires positive value
+                # Returning an array of the shape [x1, y1, x2, y2, confidence_score, track_id]
+                ret.append(np.concatenate((d, [trk.id + 1, dets[m[0], 4] if len(dets) > 0 else 0])).reshape(1, -1)) #+1'd because MOT benchmark requires positive value
             i -= 1
             #remove dead tracklet
             if(trk.time_since_update >self.max_age):
