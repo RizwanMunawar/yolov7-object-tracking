@@ -3,3 +3,4 @@ runs/
 __pycache__
 weights/
 traced_model.pt
+.idea/
