@@ -78,7 +78,7 @@ class Detect(nn.Module):
 
     @staticmethod
     def _make_grid(nx=20, ny=20):
-        yv, xv = torch.meshgrid([torch.arange(ny), torch.arange(nx)])
+        yv, xv = torch.meshgrid([torch.arange(ny), torch.arange(nx)], indexing='ij')
         return torch.stack((xv, yv), 2).view((1, 1, ny, nx, 2)).float()
 
     def convert(self, z):
@@ -91,7 +91,7 @@ class Detect(nn.Module):
                                            dtype=torch.float32,
                                            device=z.device)
         box @= convert_matrix                          
-        return (box, score)
+        return box, score
 
 
 class IDetect(nn.Module):
@@ -204,7 +204,7 @@ class IDetect(nn.Module):
                                            dtype=torch.float32,
                                            device=z.device)
         box @= convert_matrix                          
-        return (box, score)
+        return box, score
 
 
 class IKeypoint(nn.Module):
@@ -427,7 +427,7 @@ class IAuxDetect(nn.Module):
                                            dtype=torch.float32,
                                            device=z.device)
         box @= convert_matrix                          
-        return (box, score)
+        return box, score
 
 
 class IBin(nn.Module):
@@ -691,13 +691,10 @@ class Model(nn.Module):
     #             print('%10.3g' % (m.w.detach().sigmoid() * 2))  # shortcut weights
 
     def fuse(self):  # fuse model Conv2d() + BatchNorm2d() layers
-        print('Fusing layers... ')
         for m in self.model.modules():
             if isinstance(m, RepConv):
-                #print(f" fuse_repvgg_block")
                 m.fuse_repvgg_block()
             elif isinstance(m, RepConv_OREPA):
-                #print(f" switch_to_deploy")
                 m.switch_to_deploy()
             elif type(m) is Conv and hasattr(m, 'bn'):
                 m.conv = fuse_conv_and_bn(m.conv, m.bn)  # update conv

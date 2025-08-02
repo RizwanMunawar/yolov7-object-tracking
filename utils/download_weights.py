@@ -3,8 +3,9 @@ import requests
 from tqdm.auto import tqdm
 
 
-# Pre-trained weights for YoloV7 model
+# Pre-trained weights for YoloV7 model and demo video URL's/
 WEIGHTS_URL = "https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt"   # ?dl=1"
+VIDEO_URL = "https://github.com/RizwanMunawar/yolov7-object-tracking/releases/download/yolov7-object-tracking/demo.mp4"
 
 
 def download(dest_path, url=None, file_name=None):
@@ -28,3 +29,15 @@ def download(dest_path, url=None, file_name=None):
         for data in resp.iter_content(chunk_size=1024):
             size = file.write(data)
             bar.update(size)
+
+def download_demo_video(url=VIDEO_URL, dest="assets"):
+    """Download demo video for inference."""
+    os.makedirs(dest, exist_ok=True)
+    file_path = os.path.join(dest, os.path.basename(url))
+    r = requests.get(url, stream=True)
+    with open(file_path, "wb") as f, tqdm(total=int(r.headers.get("content-length", 0)), unit="B", unit_scale=True) as bar:
+        for chunk in r.iter_content(1024):
+            f.write(chunk)
+            bar.update(len(chunk))
+    return file_path
+
