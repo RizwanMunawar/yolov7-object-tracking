@@ -95,6 +95,34 @@
 
 6. **Output files** will be saved in `working-dir/runs/detect/obj-tracking` with the original filename.
 
+### Arguments details
+
+| Argument                | Type        | Default           | Description                                                         |
+|-------------------------|-------------|-------------------|---------------------------------------------------------------------|
+| `--weights`             | `str`       | `yolov7.pt`       | Path(s) to model weights (`.pt` file).                              |
+| `--download`            | `flag`      | `False`           | Download model weights automatically.                               |
+| `--no-download`         | `flag`      | `False`           | Do not download model weights if they already exist.                |
+| `--source`              | `str`       | `None`            | Source for inference (file, folder, or `0` for webcam).             |
+| `--img-size`            | `int`       | `640`             | Inference image size in pixels.                                     |
+| `--conf-thres`          | `float`     | `0.25`            | Object confidence threshold.                                        |
+| `--iou-thres`           | `float`     | `0.45`            | Intersection over Union (IoU) threshold for NMS.                    |
+| `--device`              | `str`       | `''` (auto)       | CUDA device (e.g., `0` or `0,1,2,3`) or `cpu`.                      |
+| `--view-img`            | `flag`      | `False`           | Display results during inference.                                   |
+| `--save-txt`            | `flag`      | `False`           | Save results to `.txt` files.                                       |
+| `--save-conf`           | `flag`      | `False`           | Save confidence scores in `.txt` labels.                            |
+| `--nosave`              | `flag`      | `False`           | Do not save images or videos.                                       |
+| `--classes`             | `list[int]` | `None`            | Filter results by class (e.g., `--classes 0` or `--classes 0 2 3`). |
+| `--agnostic-nms`        | `flag`      | `False`           | Use class-agnostic Non-Maximum Suppression (NMS).                   |
+| `--augment`             | `flag`      | `False`           | Enable augmented inference.                                         |
+| `--update`              | `flag`      | `False`           | Update all models.                                                  |
+| `--project`             | `str`       | `runs/detect`     | Directory to save results (`project/name`).                         |
+| `--name`                | `str`       | `object_tracking` | Name of the results folder inside the project directory.            |
+| `--exist-ok`            | `flag`      | `False`           | Allow existing project/name without incrementing.                   |
+| `--no-trace`            | `flag`      | `False`           | Do not trace the model during export.                               |
+| `--colored-trk`         | `flag`      | `False`           | Assign a unique color to each track for visualization.              |
+| `--save-bbox-dim`       | `flag`      | `False`           | Save bounding box dimensions in `.txt` tracks.                      |
+| `--save-with-object-id` | `flag`      | `False`           | Save results with object ID in `.txt` files.                        |
+
 ### Results 📊
 <table>
   <tr>
