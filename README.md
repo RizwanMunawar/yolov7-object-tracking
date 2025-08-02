@@ -10,12 +10,13 @@
     ```bash
     git clone https://github.com/RizwanMunawar/yolov7-object-tracking.git
     ```
-3. Navigate to the cloned folder:
+   
+2. Navigate to the cloned folder:
     ```bash
     cd yolov7-object-tracking
     ```
 
-4. Create a virtual environment (Recommended to avoid conflicts):
+3. Create a virtual environment (Recommended to avoid conflicts):
 
     For Anaconda:
     ```bash
@@ -36,23 +37,29 @@
     activate
     ```
 
-5. Update pip and install dependencies:
+4. Update pip and install dependencies:
     ```bash
     pip install --upgrade pip
     pip install -r requirements.txt
     ```
 
-6. Run the script:
+5. Run the script:
 
     Select the appropriate command based on your requirements. Pretrained [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) weights will be downloaded automatically if needed.
 
     - Detection only:
       ```bash
+      python detect.py --weights yolov7.pt
+  
+      # If you want to use your own videos.
       python detect.py --weights yolov7.pt --source "your video.mp4"
       ```
 
     - Object tracking:
       ```bash
+      python detect_and_track.py --weights yolov7.pt
+      
+      # If you want to use your own videos.
       python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
       ```
 
@@ -86,7 +93,7 @@
       python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --save-txt --save-bbox-dim
       ```
 
-7. **Output files** will be saved in `working-dir/runs/detect/obj-tracking` with the original filename.
+6. **Output files** will be saved in `working-dir/runs/detect/obj-tracking` with the original filename.
 
 ### Results 📊
 <table>

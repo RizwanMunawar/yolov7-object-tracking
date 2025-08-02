@@ -15,10 +15,14 @@ from utils.general import check_img_size, check_requirements, \
                 increment_path
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
-from utils.download_weights import download
+from utils.download_weights import download, download_demo_video
 
 def detect(save_img=False):
     source, weights, view_img, save_txt, imgsz, trace,blur = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace,opt.blur
+    if source is None:
+        print("⚠️ No source provided, using demo.mp4 from yolov7-object-tracking assets...")
+        download_demo_video()
+        source="assets/demo.mp4"
     save_img = not opt.nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
@@ -181,7 +185,7 @@ if __name__ == '__main__':
     parser.add_argument('--weights', nargs='+', type=str, default='yolov7.pt', help='model.pt path(s)')
     parser.add_argument('--download', action='store_true', help='download model weights automatically')
     parser.add_argument('--no-download', dest='download', action='store_false')
-    parser.add_argument('--source', type=str, default='inference/images', help='source')  # file/folder, 0 for webcam
+    parser.add_argument('--source', default=None, type=str, help='source')  # file/folder, 0 for webcam
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')
