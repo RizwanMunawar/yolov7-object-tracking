@@ -237,10 +237,7 @@ class End2End(nn.Module):
 def attempt_load(weights, map_location=None):
     # Loads an ensemble of models weights=[a,b,c] or a single model weights=[a] or weights=a
     from packaging import version
-    if version.parse(torch.__version__) >= version.parse("2.6"):
-        weights_only = False
-    else:
-        weights_only = True
+    weights_only = False if version.parse(torch.__version__) >= version.parse("2.6") else True
     model = Ensemble()
     for w in weights if isinstance(weights, list) else [weights]:
         # attempt_download(w)
