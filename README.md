@@ -18,19 +18,19 @@
 
 3. Create a virtual environment (Recommended to avoid conflicts):
 
-    For Anaconda:
+    **For Anaconda**:
     ```bash
     conda create -n yolov7objtracking python=3.10
     conda activate yolov7objtracking
     ```
 
-    For Linux:
+    **For Linux**:
     ```bash
     python3 -m venv yolov7objtracking
     source yolov7objtracking/bin/activate
     ```
 
-    For Windows:
+    **For Windows**:
     ```bash
     python3 -m venv yolov7objtracking
     cd yolov7objtracking/Scripts
@@ -47,7 +47,7 @@
 
     Select the appropriate command based on your requirements. Pretrained [yolov7](https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt) weights will be downloaded automatically if needed.
 
-    - Detection only:
+    - **Detection only**:
       ```bash
       python detect.py --weights yolov7.pt
   
@@ -55,7 +55,7 @@
       python detect.py --weights yolov7.pt --source "your video.mp4"
       ```
 
-    - Object tracking:
+    - **Object tracking**:
       ```bash
       python detect_and_track.py --weights yolov7.pt
       
@@ -63,65 +63,65 @@
       python detect_and_track.py --weights yolov7.pt --source "your video.mp4"
       ```
 
-    - Webcam:
+    - **Webcam**:
       ```bash
       python detect_and_track.py --weights yolov7.pt --source 0
       ```
 
-    - External Camera:
+    - **External Camera**:
       ```bash
       python detect_and_track.py --weights yolov7.pt --source 1
       ```
 
-    - IP Camera Stream:
+    - **IP Camera Stream**:
       ```bash
       python detect_and_track.py --source "your IP Camera Stream URL" --device 0
       ```
 
-    - Specific class tracking (e.g., person):
+    - **Specific class tracking (e.g., person)**:
       ```bash
       python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --classes 0
       ```
 
-    - Colored tracks:
+    - **Colored tracks**:
       ```bash
       python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --colored-trk
       ```
 
-    - Save track centroids, IDs, and bounding box coordinates:
+    - **Save track centroids, IDs, and bounding box coordinates**:
       ```bash
       python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --save-txt --save-bbox-dim
       ```
 
 6. **Output files** will be saved in `working-dir/runs/detect/obj-tracking` with the original filename.
 
-### Arguments details
+### Arguments details 🚀
 
-| Argument                | Type        | Default           | Description                                                         |
-|-------------------------|-------------|-------------------|---------------------------------------------------------------------|
-| `--weights`             | `str`       | `yolov7.pt`       | Path(s) to model weights (`.pt` file).                              |
-| `--download`            | `flag`      | `False`           | Download model weights automatically.                               |
-| `--no-download`         | `flag`      | `False`           | Do not download model weights if they already exist.                |
-| `--source`              | `str`       | `None`            | Source for inference (file, folder, or `0` for webcam).             |
-| `--img-size`            | `int`       | `640`             | Inference image size in pixels.                                     |
-| `--conf-thres`          | `float`     | `0.25`            | Object confidence threshold.                                        |
-| `--iou-thres`           | `float`     | `0.45`            | Intersection over Union (IoU) threshold for NMS.                    |
-| `--device`              | `str`       | `''` (auto)       | CUDA device (e.g., `0` or `0,1,2,3`) or `cpu`.                      |
-| `--view-img`            | `flag`      | `False`           | Display results during inference.                                   |
-| `--save-txt`            | `flag`      | `False`           | Save results to `.txt` files.                                       |
-| `--save-conf`           | `flag`      | `False`           | Save confidence scores in `.txt` labels.                            |
-| `--nosave`              | `flag`      | `False`           | Do not save images or videos.                                       |
-| `--classes`             | `list[int]` | `None`            | Filter results by class (e.g., `--classes 0` or `--classes 0 2 3`). |
-| `--agnostic-nms`        | `flag`      | `False`           | Use class-agnostic Non-Maximum Suppression (NMS).                   |
-| `--augment`             | `flag`      | `False`           | Enable augmented inference.                                         |
-| `--update`              | `flag`      | `False`           | Update all models.                                                  |
-| `--project`             | `str`       | `runs/detect`     | Directory to save results (`project/name`).                         |
-| `--name`                | `str`       | `object_tracking` | Name of the results folder inside the project directory.            |
-| `--exist-ok`            | `flag`      | `False`           | Allow existing project/name without incrementing.                   |
-| `--no-trace`            | `flag`      | `False`           | Do not trace the model during export.                               |
-| `--colored-trk`         | `flag`      | `False`           | Assign a unique color to each track for visualization.              |
-| `--save-bbox-dim`       | `flag`      | `False`           | Save bounding box dimensions in `.txt` tracks.                      |
-| `--save-with-object-id` | `flag`      | `False`           | Save results with object ID in `.txt` files.                        |
+| Argument                | Type        | Default                       | Description                                                         |
+|-------------------------|-------------|-------------------------------|---------------------------------------------------------------------|
+| `--weights`             | `str`       | `yolov7.pt`                   | Path(s) to model weights (`.pt` file).                              |
+| `--download`            | `flag`      | `False`                       | Download model weights automatically.                               |
+| `--no-download`         | `flag`      | `False`                       | Do not download model weights if they already exist.                |
+| `--source`              | `str`       | `None`                        | Source for inference (file, folder, or `0` for webcam).             |
+| `--img-size`            | `int`       | `640`                         | Inference image size in pixels.                                     |
+| `--conf-thres`          | `float`     | `0.25`                        | Object confidence threshold.                                        |
+| `--iou-thres`           | `float`     | `0.45`                        | Intersection over Union (IoU) threshold for NMS.                    |
+| `--device`              | `str`       | `''`                          | CUDA device (e.g., `0` or `0,1,2,3`) or `cpu`.                      |
+| `--view-img`            | `flag`      | `False`                       | Display results during inference.                                   |
+| `--save-txt`            | `flag`      | `False`                       | Save results to `.txt` files.                                       |
+| `--save-conf`           | `flag`      | `False`                       | Save confidence scores in `.txt` labels.                            |
+| `--nosave`              | `flag`      | `False`                       | Do not save images or videos.                                       |
+| `--classes`             | `list[int]` | `None`                        | Filter results by class (e.g., `--classes 0` or `--classes 0 2 3`). |
+| `--agnostic-nms`        | `flag`      | `False`                       | Use class-agnostic Non-Maximum Suppression (NMS).                   |
+| `--augment`             | `flag`      | `False`                       | Enable augmented inference.                                         |
+| `--update`              | `flag`      | `False`                       | Update all models.                                                  |
+| `--project`             | `str`       | `runs/detect`                 | Directory to save results (`project/name`).                         |
+| `--name`                | `str`       | `runs/detect/object_tracking` | Name of the results folder inside the project directory.            |
+| `--exist-ok`            | `flag`      | `False`                       | Allow existing project/name without incrementing.                   |
+| `--no-trace`            | `flag`      | `False`                       | Do not trace the model during export.                               |
+| `--colored-trk`         | `flag`      | `False`                       | Assign a unique color to each track for visualization.              |
+| `--save-bbox-dim`       | `flag`      | `False`                       | Save bounding box dimensions in `.txt` tracks.                      |
+| `--save-with-object-id` | `flag`      | `False`                       | Save results with object ID in `.txt` files.                        |
 
 ### Results 📊
 <table>
