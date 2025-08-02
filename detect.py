@@ -17,8 +17,8 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 from utils.download_weights import download, download_demo_video
 
-def detect(save_img=False):
-    source, weights, view_img, save_txt, imgsz, trace,blur = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace,opt.blur
+def detect():
+    source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     if source is None:
         print("⚠️ No source provided, using demo.mp4 from yolov7-object-tracking assets...")
         download_demo_video()
@@ -87,7 +87,7 @@ def detect(save_img=False):
             old_img_h = img.shape[2]
             old_img_w = img.shape[3]
             for i in range(3):
-                model(img, augment=opt.augment)[0]
+                _ = model(img, augment=opt.augment)[0]
 
         # Inference
         t1 = time_synchronized()
@@ -124,15 +124,6 @@ def detect(save_img=False):
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-
-                    if blur:
-                        #Add Object Blurring Code
-                        #..................................................................
-                        crop_obj = im0[int(xyxy[1]):int(xyxy[3]),int(xyxy[0]):int(xyxy[2])]
-                        blur = cv2.blur(crop_obj,(60,60))
-                        im0[int(xyxy[1]):int(xyxy[3]),int(xyxy[0]):int(xyxy[2])] = blur
-                        #..................................................................
-                   
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if opt.save_conf else (cls, *xywh)  # label format
@@ -141,7 +132,7 @@ def detect(save_img=False):
 
                     if save_img or view_img:  # Add bbox to image
                         label = f'{names[int(cls)]} {conf:.2f}'
-                        plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
+                        plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
                         
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
@@ -175,7 +166,7 @@ def detect(save_img=False):
 
     if save_txt or save_img:
         s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
-        #print(f"Results saved to {save_dir}{s}")
+        print(f"Results saved to {save_dir}{s}")
 
     print(f'Done. ({time.time() - t0:.3f}s)')
 
@@ -184,7 +175,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='yolov7.pt', help='model.pt path(s)')
     parser.add_argument('--download', action='store_true', help='download model weights automatically')
-    parser.add_argument('--no-download', dest='download', action='store_false')
     parser.add_argument('--source', default=None, type=str, help='source')  # file/folder, 0 for webcam
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
@@ -202,14 +192,12 @@ if __name__ == '__main__':
     parser.add_argument('--name', default='object_tracking', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
-    parser.add_argument('--blur', action='store_true', help='blur detections')
     parser.set_defaults(download=True)
     opt = parser.parse_args()
     print(opt)
 
-    #check_requirements(exclude=('pycocotools', 'thop'))
-    if opt.download and not os.path.exists(str(opt.weights)):
-        print('Model weights not found. Attempting to download now...')
+    if not os.path.exists(opt.weights[0]):
+        print('⚠️ Model weights not found. Attempting to download now...')
         download('./')
 
     with torch.no_grad():
