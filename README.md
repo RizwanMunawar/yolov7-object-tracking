@@ -168,3 +168,8 @@
 [Train YOLOv8 on Custom Data](https://medium.com/augmented-startups/train-yolov8-on-custom-data-6d28cd348262)  ![Published Date](https://img.shields.io/badge/published_Date-2022--09--23-brightgreen)
 
 [Session with Ultralytics Team about Computer Vision Journey](https://www.ultralytics.com/blog/becoming-a-computer-vision-engineer)  ![Published Date](https://img.shields.io/badge/published_Date-2022--11--15-brightgreen)
+
+### Contributors 🤝
+<a href="https://github.com/RizwanMunawar/yolov7-object-tracking/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=RizwanMunawar/yolov7-object-tracking" />
+</a>
