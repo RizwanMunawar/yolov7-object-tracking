@@ -151,26 +151,6 @@ def check_file(file):
         return files[0]  # return file
 
 
-# def check_dataset(dict):
-#     # Download dataset if not found locally
-#     val, s = dict.get('val'), dict.get('download')
-#     if val and len(val):
-#         val = [Path(x).resolve() for x in (val if isinstance(val, list) else [val])]  # val path
-#         if not all(x.exists() for x in val):
-#             print('\nWARNING: Dataset not found, nonexistent paths: %s' % [str(x) for x in val if not x.exists()])
-#             if s and len(s):  # download script
-#                 print('Downloading %s ...' % s)
-#                 if s.startswith('http') and s.endswith('.zip'):  # URL
-#                     f = Path(s).name  # filename
-#                     torch.hub.download_url_to_file(s, f)
-#                     r = os.system('unzip -q %s -d ../ && rm %s' % (f, f))  # unzip
-#                 else:  # bash script
-#                     r = os.system(s)
-#                 print('Dataset autodownload %s\n' % ('success' if r == 0 else 'failure'))  # analyze return value
-#             else:
-#                 raise Exception('Dataset not found.')
-
-
 def make_divisible(x, divisor):
     # Returns x evenly divisible by divisor
     return math.ceil(x / divisor) * divisor
@@ -179,11 +159,6 @@ def make_divisible(x, divisor):
 def clean_str(s):
     # Cleans a string by replacing special characters with underscore _
     return re.sub(pattern="[|@#!¡·$€%&()=?¿^*;:,¨´><+]", repl="_", string=s)
-
-
-# def one_cycle(y1=0.0, y2=1.0, steps=100):
-#     # lambda function for sinusoidal ramp from y1 to y2
-#     return lambda x: ((1 - math.cos(x * math.pi / steps)) / 2) * (y2 - y1) + y1
 
 
 def colorstr(*input):
@@ -236,18 +211,6 @@ def labels_to_image_weights(labels, nc=80, class_weights=np.ones(80)):
     image_weights = (class_weights.reshape(1, nc) * class_counts).sum(1)
     # index = random.choices(range(n), weights=image_weights, k=1)  # weight image sample
     return image_weights
-
-
-# def coco80_to_coco91_class():  # converts 80-index (val2014) to 91-index (paper)
-#     # https://tech.amikelive.com/node-718/what-object-categories-labels-are-in-coco-dataset/
-#     # a = np.loadtxt('data/coco.names', dtype='str', delimiter='\n')
-#     # b = np.loadtxt('data/coco_paper.names', dtype='str', delimiter='\n')
-#     # x1 = [list(a[i] == b).index(True) + 1 for i in range(80)]  # darknet to coco
-#     # x2 = [list(b[i] == a).index(True) if any(b[i] == a) else None for i in range(91)]  # coco to darknet
-#     x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 31, 32, 33, 34,
-#          35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
-#          64, 65, 67, 70, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90]
-#     return x
 
 
 def xyxy2xywh(x):
