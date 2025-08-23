@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn
 
 from models.common import Conv, DWConv
-from utils.google_utils import attempt_download
 
 
 class CrossConv(nn.Module):
@@ -240,7 +239,6 @@ def attempt_load(weights, map_location=None):
     weights_only = False if version.parse(torch.__version__) >= version.parse("2.6") else True
     model = Ensemble()
     for w in weights if isinstance(weights, list) else [weights]:
-        # attempt_download(w)
         ckpt = torch.load(w, map_location=map_location, weights_only=weights_only)  # load
         model.append(ckpt['ema' if ckpt.get('ema') else 'model'].float().fuse().eval())  # FP32 model
     

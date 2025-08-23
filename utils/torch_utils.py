@@ -78,7 +78,7 @@ def select_device(device='', batch_size=None):
         space = ' ' * len(s)
         for i, d in enumerate(device.split(',') if device else range(n)):
             p = torch.cuda.get_device_properties(i)
-            s += f"{'' if i == 0 else space}CUDA:{d} ({p.name}, {p.total_memory / 1024 ** 2}MB)"  # bytes to MB
+            s += f"{'' if i == 0 else space} CUDA:{d} ({p.name}, {p.total_memory / 1024 ** 2}MB)"  # bytes to MB
     else:
         s += 'CPU'
 
@@ -94,12 +94,6 @@ def time_synchronized():
 
 
 def profile(x, ops, n=100, device=None):
-    # profile a pytorch module or list of modules. Example usage:
-    #     x = torch.randn(16, 3, 640, 640)  # input
-    #     m1 = lambda x: x * torch.sigmoid(x)
-    #     m2 = nn.SiLU()
-    #     profile(x, [m1, m2], n=100)  # profile speed over 100 iterations
-
     device = device or torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     x = x.to(device)
     x.requires_grad = True
@@ -342,7 +336,7 @@ def revert_sync_batchnorm(module):
 
 class TracedModel(nn.Module):
 
-    def __init__(self, model=None, device=None, img_size=(640,640)): 
+    def __init__(self, model=None, device=None, img_size=(640,640)):
         super(TracedModel, self).__init__()
 
         self.stride = model.stride
@@ -355,9 +349,9 @@ class TracedModel(nn.Module):
 
         self.detect_layer = self.model.model[-1]
         self.model.traced = True
-        
+
         rand_example = torch.rand(1, 3, img_size, img_size)
-        
+
         traced_script_module = torch.jit.trace(self.model, rand_example, strict=False)
         traced_script_module.save("traced_model.pt")
         self.model = traced_script_module
