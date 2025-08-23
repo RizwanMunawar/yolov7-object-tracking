@@ -17,7 +17,7 @@ from utils.general import check_img_size, check_requirements, \
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, \
                 time_synchronized, TracedModel
-from utils.download_weights import download, download_demo_video
+from utils.download import download, download_demo_video
 
 #For SORT tracking
 import skimage

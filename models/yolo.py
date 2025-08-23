@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 import torch
 from models.common import *
 from models.experimental import *
-from utils.autoanchor import check_anchor_order
 from utils.general import make_divisible, check_file, set_logging
 from utils.torch_utils import time_synchronized, fuse_conv_and_bn, model_info, scale_img, initialize_weights, \
     select_device, copy_attr
@@ -503,6 +502,17 @@ class IBin(nn.Module):
     def _make_grid(nx=20, ny=20):
         yv, xv = torch.meshgrid([torch.arange(ny), torch.arange(nx)])
         return torch.stack((xv, yv), 2).view((1, 1, ny, nx, 2)).float()
+
+
+def check_anchor_order(m):
+    # Check anchor order against stride order for YOLO Detect() module m, and correct if necessary
+    a = m.anchor_grid.prod(-1).view(-1)  # anchor area
+    da = a[-1] - a[0]  # delta a
+    ds = m.stride[-1] - m.stride[0]  # delta s
+    if da.sign() != ds.sign():  # same order
+        print('Reversing anchor order')
+        m.anchors[:] = m.anchors.flip(0)
+        m.anchor_grid[:] = m.anchor_grid.flip(0)
 
 
 class Model(nn.Module):

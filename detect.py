@@ -15,7 +15,7 @@ from utils.general import check_img_size, check_requirements, \
                 increment_path
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
-from utils.download_weights import download, download_demo_video
+from utils.download import download, download_demo_video
 
 def detect():
     source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
