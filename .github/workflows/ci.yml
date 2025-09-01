@@ -1,11 +1,16 @@
 name: CI
 
+permissions:
+  contents: read
+
+
 on:
   push:
-    branches: [ "**" ]
+    branches: [main]
   pull_request:
-    branches: [ "**" ]
-
+  schedule:
+    - cron: "0 8 */2 * *" # runs at 08:00 UTC every 2 days
+    
 jobs:
   Tests:
     timeout-minutes: 360
