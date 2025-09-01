@@ -7,12 +7,14 @@ on:
     branches: [ "**" ]
 
 jobs:
-  CI:
-    runs-on: [ubuntu-latest, macos-latest, windows-latest, ubuntu-24.04-arm]
+  Tests:
+    timeout-minutes: 360
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10"]
+        os: [ubuntu-latest, macos-latest, windows-latest, ubuntu-24.04-arm]
+        python-version: ["3.12"]
 
     steps:
       - name: Checkout
