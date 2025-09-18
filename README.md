@@ -93,7 +93,7 @@
       python detect_and_track.py --weights yolov7.pt --source "your video.mp4" --save-txt --save-bbox-dim
       ```
 
-6. **Output files** will be saved in `working-dir/runs/detect/obj-tracking` with the original filename.
+6. **Output files** will be saved in `runs/detect/obj-tracking` with the original filename.
 
 ### Arguments details 🚀
 
