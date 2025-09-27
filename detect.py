@@ -6,7 +6,6 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
-from random import randint
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
 from utils.general import check_img_size, check_requirements, \

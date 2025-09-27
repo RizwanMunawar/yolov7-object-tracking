@@ -1,4 +1,3 @@
-import argparse
 import logging
 import sys
 from copy import deepcopy
@@ -7,9 +6,7 @@ sys.path.append('./')  # to run '$ python *.py' files in subdirectories
 logger = logging.getLogger(__name__)
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from models.common import *
-from utils.general import make_divisible, check_file, set_logging
 from utils.torch_utils import time_synchronized, fuse_conv_and_bn, model_info, scale_img, initialize_weights, copy_attr
 
 try:

@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from PIL import Image
 
 from utils.general import non_max_suppression, increment_path, xyxy2xywh

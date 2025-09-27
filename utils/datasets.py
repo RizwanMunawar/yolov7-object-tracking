@@ -4,19 +4,15 @@ import glob
 import logging
 import os
 import time
-from itertools import repeat
 from pathlib import Path
 from threading import Thread
 
 import cv2
 import numpy as np
 import torch
-import torch.nn.functional as F
-from PIL import Image, ExifTags
 from torch.utils.data import Dataset
 
 from utils.general import check_requirements, clean_str
-from utils.torch_utils import torch_distributed_zero_first
 
 # Parameters
 img_formats = ['bmp', 'jpg', 'jpeg', 'png', 'tif', 'tiff', 'dng', 'webp', 'mpo']  # acceptable image suffixes
