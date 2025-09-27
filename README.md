@@ -101,7 +101,6 @@
 |-------------------------|-------------|-------------------------------|---------------------------------------------------------------------|
 | `--weights`             | `str`       | `yolov7.pt`                   | Path(s) to model weights (`.pt` file).                              |
 | `--download`            | `flag`      | `False`                       | Download model weights automatically.                               |
-| `--no-download`         | `flag`      | `False`                       | Do not download model weights if they already exist.                |
 | `--source`              | `str`       | `None`                        | Source for inference (file, folder, or `0` for webcam).             |
 | `--img-size`            | `int`       | `640`                         | Inference image size in pixels.                                     |
 | `--conf-thres`          | `float`     | `0.25`                        | Object confidence threshold.                                        |

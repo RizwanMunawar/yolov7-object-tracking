@@ -7,7 +7,7 @@ import torch.backends.cudnn as cudnn
 
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
-from utils.general import check_img_size, \
+from utils.general import check_img_size, check_requirements, \
                 check_imshow, non_max_suppression, apply_classifier, \
                 scale_coords, strip_optimizer, set_logging, \
                 increment_path
@@ -281,7 +281,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='yolov7.pt', help='model.pt path(s)')
     parser.add_argument('--download', action='store_true', help='download model weights automatically')
-    parser.add_argument('--no-download', dest='download', action='store_false',help='not download model weights if already exist')
     parser.add_argument('--source', type=str, default=None, help='source')  # file/folder, 0 for webcam
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
@@ -306,8 +305,22 @@ if __name__ == '__main__':
     parser.set_defaults(download=True)
     opt = parser.parse_args()
     print(opt)
-    #check_requirements(exclude=('pycocotools', 'thop'))
-    if opt.download and not os.path.exists(''.join(opt.weights)):
+    check_requirements([
+        "matplotlib>=3.2.2",
+        "numpy>=1.18.5",
+        "opencv-python>=4.1.1",
+        "Pillow>=7.1.2",
+        "PyYAML>=5.3.1",
+        "requests>=2.23.0",
+        "scipy>=1.4.1",
+        "torch>=1.7.0,!=1.12.0",
+        "torchvision>=0.8.1,!=0.13.0",
+        "tqdm>=4.41.0",
+        "protobuf==4.25.8",
+        "filterpy",
+        "scikit-image"
+    ])
+    if not os.path.exists(''.join(opt.weights)):
         print('Model weights not found. Attempting to download now...')
         download('./')
 
