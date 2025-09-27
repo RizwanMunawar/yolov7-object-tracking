@@ -6,7 +6,6 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
-from random import randint
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
 from utils.general import check_img_size, check_requirements, \
@@ -196,6 +195,19 @@ if __name__ == '__main__':
     opt = parser.parse_args()
     print(opt)
 
+    check_requirements([
+        "matplotlib>=3.2.2",
+        "numpy>=1.18.5",
+        "opencv-python>=4.1.1",
+        "Pillow>=7.1.2",
+        "PyYAML>=5.3.1",
+        "requests>=2.23.0",
+        "scipy>=1.4.1",
+        "torch>=1.7.0,!=1.12.0",
+        "torchvision>=0.8.1,!=0.13.0",
+        "tqdm>=4.41.0",
+        "protobuf==4.25.8",
+    ])
     if not os.path.exists(opt.weights[0]):
         print('⚠️ Model weights not found. Attempting to download now...')
         download('./')

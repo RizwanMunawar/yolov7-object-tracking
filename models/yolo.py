@@ -1,4 +1,3 @@
-import argparse
 import logging
 import sys
 from copy import deepcopy
@@ -7,9 +6,7 @@ sys.path.append('./')  # to run '$ python *.py' files in subdirectories
 logger = logging.getLogger(__name__)
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from models.common import *
-from utils.general import make_divisible, check_file, set_logging
 from utils.torch_utils import time_synchronized, fuse_conv_and_bn, model_info, scale_img, initialize_weights, copy_attr
 
 try:
@@ -90,17 +87,6 @@ class Detect(nn.Module):
                                       device=z.device)
         box @= convert_matrix
         return box, score
-
-
-def check_anchor_order(m):
-    # Check anchor order against stride order for YOLO Detect() module m, and correct if necessary
-    a = m.anchor_grid.prod(-1).view(-1)  # anchor area
-    da = a[-1] - a[0]  # delta a
-    ds = m.stride[-1] - m.stride[0]  # delta s
-    if da.sign() != ds.sign():  # same order
-        print('Reversing anchor order')
-        m.anchors[:] = m.anchors.flip(0)
-        m.anchor_grid[:] = m.anchor_grid.flip(0)
 
 
 class Model(nn.Module):
