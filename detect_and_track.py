@@ -37,17 +37,17 @@ def draw_boxes(img, bbox, identities=None, categories=None, names=None, save_wit
         cv2.rectangle(img, (x1, y1 - 20), (x1 + w, y1), (255,144,30), -1)
         cv2.putText(img, label, (x1, y1 - 5),cv2.FONT_HERSHEY_SIMPLEX, 
                     0.6, [255, 255, 255], 1)
-          cv2.circle(img, data, 4, (255, 144, 30),-1)   #centroid of box
-          txt_str = ""
-          if save_with_object_id:
-              txt_str += "%i %i %f %f %f %f %f %f" % (
-                  id, cat, int(box[0])/img.shape[1], int(box[1])/img.shape[0] , int(box[2])/img.shape[1], int(box[3])/img.shape[0] ,int(box[0] + (box[2] * 0.5))/img.shape[1] ,
-                  int(box[1] + (
-                      box[3]* 0.5))/img.shape[0])
-              txt_str += "\n"
-              with open(path + '.txt', 'a') as f:
-                  f.write(txt_str)
-      return img
+        cv2.circle(img, data, 4, (255, 144, 30),-1)   #centroid of box
+        txt_str = ""
+        if save_with_object_id:
+            txt_str += "%i %i %f %f %f %f %f %f" % (
+                id, cat, int(box[0])/img.shape[1], int(box[1])/img.shape[0] , int(box[2])/img.shape[1], int(box[3])/img.shape[0] ,int(box[0] + (box[2] * 0.5))/img.shape[1] ,
+                int(box[1] + (
+                    box[3]* 0.5))/img.shape[0])
+            txt_str += "\n"
+            with open(path + '.txt', 'a') as f:
+                f.write(txt_str)
+    return img
 #..............................................................................
 
 
