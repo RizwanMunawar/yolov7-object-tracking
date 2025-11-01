@@ -60,9 +60,9 @@ def git_describe(path=Path(__file__).parent):  # path must be a directory
         return ''  # not a git repository
 
 
-def select_device(device='', batch_size=None):
+def select_device(device='', batch_size=None, model_name="YOLOv7"):
     # device = 'cpu' or '0' or '0,1,2,3'
-    s = f'YOLOv7 🚀  {git_describe() or date_modified()} torch {torch.__version__}'  # string
+    s = f'{model_name} 🚀  torch {torch.__version__}'  # string
     cpu = device.lower() == 'cpu'
     if cpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'  # force torch.cuda.is_available() = False

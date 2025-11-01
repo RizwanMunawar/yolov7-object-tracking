@@ -20,8 +20,8 @@ import skimage
 from sort import *
 
 #............................... Bounding Boxes Drawing ............................
-"""Function to Draw Bounding boxes"""
 def draw_boxes(img, bbox, identities=None, categories=None, names=None, save_with_object_id=False, path=None,offset=(0, 0)):
+    """Function to Draw Bounding boxes"""
     for i, box in enumerate(bbox):
         x1, y1, x2, y2 = [int(i) for i in box]
         x1 += offset[0]
