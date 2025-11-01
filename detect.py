@@ -30,12 +30,30 @@ def detect():
     save_dir = Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
 
+    # Detect model type
+    model_dict = torch.load(weights[0], map_location='cpu', weights_only=False)
+    if isinstance(model_dict, dict):
+        model_dict = model_dict.get('model', model_dict.get('ema', model_dict))
+
+    model_name = None
+    model_str = str(model_dict).lower()
+    if any(k in model_str for k in ['repconv', 'elan', 'mpconv', 'e-elan']):
+        model_name = "YOLOv7"
+    elif 'c2f' in model_str:
+        model_name = "YOLOv8"
+
     # Initialize
     set_logging()
-    device = select_device(opt.device)
+    device = select_device(opt.device, model_name=model_name)
     half = device.type != 'cpu'  # half precision only supported on CUDA
 
-    # Load model
+    # Handle YOLOv8
+    if model_name == "YOLOv8":
+        from ultralytics import YOLO
+        model = YOLO(weights[0])
+        model.predict(source=source, save=save_img, show=view_img)
+        return
+
     model = attempt_load(weights, map_location=device)  # load FP32 model
     stride = int(model.stride.max())  # model stride
     imgsz = check_img_size(imgsz, s=stride)  # check img_size
@@ -72,7 +90,7 @@ def detect():
     old_img_b = 1
 
     t0 = time.time()
-   
+
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -132,7 +150,7 @@ def detect():
                     if save_img or view_img:  # Add bbox to image
                         label = f'{names[int(cls)]} {conf:.2f}'
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
-                        
+
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
 
@@ -210,7 +228,7 @@ if __name__ == '__main__':
     ])
     if not os.path.exists(opt.weights[0]):
         print('⚠️ Model weights not found. Attempting to download now...')
-        download('./')
+        download('./', file_name=opt.weights[0])
 
     with torch.no_grad():
         if opt.update:  # update all models (to fix SourceChangeWarning)
