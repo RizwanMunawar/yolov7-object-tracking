@@ -39,7 +39,7 @@ def detect():
     model_str = str(model_dict).lower()
     if any(k in model_str for k in ['repconv', 'elan', 'mpconv', 'e-elan']):
         model_name = "YOLOv7"
-    elif any(k in model_str for k in ['c2f', 'detect', 'pose', 'segment', 'classify']):
+    elif 'c2f' in model_str:
         model_name = "YOLOv8"
 
     # Initialize

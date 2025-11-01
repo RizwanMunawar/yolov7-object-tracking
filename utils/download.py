@@ -11,7 +11,8 @@ VIDEO_URL = "https://github.com/RizwanMunawar/yolov7-object-tracking/releases/do
 
 def download(dest_path, url=None, file_name=None):
     """ Download model weights to a destination path from a given url. """
-    url = url if url is not None else (YOLOv8_WEIGHTS_URL if file_name.startswith("yolov8") else WEIGHTS_URL)
+    url = url if url is not None else (
+        YOLOv8_WEIGHTS_URL if file_name and file_name.startswith("yolov8") else WEIGHTS_URL)
     resp = requests.get(url, stream=True)
 
     os.makedirs(dest_path, exist_ok=True)
