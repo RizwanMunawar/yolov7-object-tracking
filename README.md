@@ -25,7 +25,7 @@
 
     **For Anaconda**:
     ```bash
-    conda create -n yolov7objtracking python=3.10
+    conda create -n yolov7objtracking python=3.12
     conda activate yolov7objtracking
     ```
 
