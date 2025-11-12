@@ -6,13 +6,17 @@ from tqdm.auto import tqdm
 # Pre-trained weights for YoloV7 model and demo video URL's/
 WEIGHTS_URL = "https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt"   # ?dl=1"
 YOLOv8_WEIGHTS_URL = "https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt"
+YOLOv9_WEIGHTS_URL = "https://github.com/WongKinYiu/yolov9/releases/download/v0.1/yolov9-t-converted.pt"
 VIDEO_URL = "https://github.com/RizwanMunawar/yolov7-object-tracking/releases/download/yolov7-object-tracking/demo.mp4"
 
 
 def download(dest_path, url=None, file_name=None):
     """ Download model weights to a destination path from a given url. """
     url = url if url is not None else (
-        YOLOv8_WEIGHTS_URL if file_name and file_name.startswith("yolov8") else WEIGHTS_URL)
+    YOLOv8_WEIGHTS_URL if file_name and file_name.startswith("yolov8") else
+    YOLOv9_WEIGHTS_URL if file_name and file_name.startswith("yolov9") else
+    WEIGHTS_URL
+)
     resp = requests.get(url, stream=True)
 
     os.makedirs(dest_path, exist_ok=True)
