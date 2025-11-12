@@ -6,7 +6,7 @@
 
 💥 **Ultralytics YOLOv8** support added `python detect.py --weights yolov8n.pt`
 
-🔥🔥🔥 **YOLOv9, YOLOv10, YOLO11, YOLO12, YOLO13** support coming soon :)
+ 🚀 **YOLOv9, YOLOv10, YOLO11, YOLO12, YOLO13** support coming soon :)
 
 ### How to Run the Code
 
