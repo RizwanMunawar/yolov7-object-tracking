@@ -6,7 +6,7 @@
 
 💥 **Ultralytics YOLOv8** support added `python detect.py --weights yolov8n.pt`
 
-🔥🔥🔥 **YOLOv9, YOLOv10, YOLO11, YOLO12, YOLO13** support coming soon :)
+ 🚀 **YOLOv9, YOLOv10, YOLO11, YOLO12, YOLO13** support coming soon :)
 
 ### How to Run the Code
 
@@ -40,6 +40,12 @@
     python3 -m venv yolov7objtracking
     cd yolov7objtracking/Scripts
     activate
+    ```
+
+    **For MacOS**:
+    ```bash
+    python3 -m venv yolov7objtracking
+    source yolov7objtracking/bin/activate
     ```
 
 4. Update pip and install dependencies:
