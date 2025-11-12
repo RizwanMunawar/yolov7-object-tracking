@@ -42,6 +42,12 @@
     activate
     ```
 
+    **For MacOS**:
+    ```bash
+    python3 -m venv yolov7objtracking
+    source yolov7objtracking/bin/activate
+    ```
+
 4. Update pip and install dependencies:
     ```bash
     pip install --upgrade pip
