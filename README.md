@@ -150,6 +150,10 @@
   </tr>
 </table>
 
+### Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=RizwanMunawar/yolov7-object-tracking&type=date&legend=top-left)](https://www.star-history.com/#RizwanMunawar/yolov7-object-tracking&type=date&legend=top-left)
+
 ### References
 
 - [YOLOv7 GitHub](https://github.com/WongKinYiu/yolov7)
